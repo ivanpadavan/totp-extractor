@@ -40,38 +40,39 @@ test('all languages translate UI, errors and dialogs while preserving accounts a
   expect(await page.evaluate(()=>({...localStorage}))).toEqual({language:'id'});
 });
 
-test('HTTP Accept-Language takes priority over navigator language; saved choice takes priority over both', async ({browser,baseURL}) => {
-  const context = await browser.newContext({locale:'en-US', extraHTTPHeaders:{'Accept-Language':'fr-CA,fr;q=0.9,en;q=0.2'}});
+test('browser language preferences select the default; saved choice and explicit URLs take priority', async ({browser,baseURL}) => {
+  const context = await browser.newContext({locale:'en-US', extraHTTPHeaders:{'Accept-Language':'de-DE'}});
   try {
+    await context.addInitScript(() => Object.defineProperty(navigator,'languages',{value:['xx-XX','fr-CA','en-US']}));
     const page = await context.newPage(); await page.goto(baseURL!);
     expect(await page.evaluate(()=>navigator.language)).toBe('en-US');
     await expect(page.locator('html')).toHaveAttribute('lang','fr');
     expect(await page.evaluate(()=>({...localStorage}))).toEqual({});
     await page.locator('#language').selectOption('ja');
-    await page.reload(); await expect(page.locator('html')).toHaveAttribute('lang','ja');
+    await page.goto(baseURL!); await expect(page.locator('html')).toHaveAttribute('lang','ja');
     await expect(page.locator('h1')).toHaveText(catalogs.ja.title);
+    await page.goto(new URL('de/',baseURL!).href);
+    await expect(page.locator('html')).toHaveAttribute('lang','de');
   } finally { await context.close(); }
 });
 
-test('import works while HTTP locale is pending and a manual choice wins over a late response', async ({page}) => {
-  let release!: () => void;
-  const waiting = new Promise<void>(resolve => { release = resolve; });
-  await page.route('**/api/locale',async route => {
-    await waiting;
-    await route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify({locale:'ru'})});
+test('language selection and imports work with all external requests blocked', async ({page,baseURL}) => {
+  const external:string[] = [];
+  const origin = new URL(baseURL!).origin;
+  await page.route('**/*',async route => {
+    if (new URL(route.request().url()).origin === origin) await route.continue();
+    else { external.push(route.request().url()); await route.abort(); }
   });
   await page.goto('./');
+  await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await expect(page.locator('#app')).toHaveAttribute('data-ready','true');
   await page.locator('#tab-text').click();
   await page.locator('#uri-input').fill(uri);
   await page.locator('#parse-text').click();
   await expect(page.locator('#count')).toHaveText('1');
   await page.locator('#language').selectOption('de');
-  const reply = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/api/locale'));
-  release();
-  await (await reply).finished();
-  await page.evaluate(() => new Promise(requestAnimationFrame));
   await expect(page.locator('html')).toHaveAttribute('lang','de');
   await expect(page.locator('#count')).toHaveText('1');
   await expect(page.locator('.account-name')).toHaveText('alice@example.com');
+  expect(external).toEqual([]);
 });

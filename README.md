@@ -18,7 +18,7 @@ Use a **setup or export QR code**: a screenshot of a rotating six-digit code can
 - Google Authenticator `otpauth-migration://` exports, including multiple parts.
 - Multiple images or QR codes at once, with duplicate detection.
 - SHA-1/256/512, 6- or 8-digit codes and HOTP counters preserved.
-- 16 languages, light and dark themes, mobile layout and Arabic RTL.
+- 16 languages with automatic browser-language selection, light and dark themes, mobile layout and Arabic RTL.
 
 PNG, JPEG, WebP and BMP images are supported, up to 20 MiB and 40 megapixels each. JSON and CSV are export formats; importing them is not supported yet.
 

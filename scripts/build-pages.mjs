@@ -8,6 +8,6 @@ const path = name.toLowerCase() === host ? '/' : `/${name}/`;
 const siteUrl = process.env.VITE_SITE_URL || `https://${host}${path}`;
 const result = spawnSync('npm',['run','build'], {
   stdio:'inherit',
-  env:{...process.env,VITE_SITE_URL:siteUrl,VITE_LOCALE_ENDPOINT:process.env.VITE_LOCALE_ENDPOINT || 'https://totp.frolkin.top/api/locale'},
+  env:{...process.env,VITE_SITE_URL:siteUrl},
 });
 process.exit(result.status ?? 1);

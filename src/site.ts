@@ -1,2 +1,2 @@
 export const siteName = 'TOTP Extractor';
-export const defaultSiteUrl = 'https://totp.frolkin.top/';
+export const defaultSiteUrl = 'https://totp-extractor.github.io/';

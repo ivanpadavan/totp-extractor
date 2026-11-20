@@ -11,7 +11,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The production server (`npm run preview`, port 8080; configurable with `PORT`) serves the generated application and a language endpoint. It accepts GET/HEAD only, has no access log and requires no database or npm runtime dependencies. `/health` is the container health check.
+The production server (`npm run preview`, port 8080; configurable with `PORT`) serves the generated static application. It accepts GET/HEAD only, has no access log and requires no database or npm runtime dependencies. `/health` is the container health check.
 
 Build and run with Docker:
 
@@ -32,21 +32,19 @@ This emits a complete static site in `dist/`, including a `.nojekyll` marker. As
 
 GitHub Pages uses the workflow in [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). It builds on every push to `main`, runs the unit tests and deploys the generated artifact. A manual run is also available in the Actions tab. Pages is configured to use GitHub Actions as its publishing source.
 
-The public source repository is [totp-extractor/totp-extractor.github.io](https://github.com/totp-extractor/totp-extractor.github.io). The main site is [totp-extractor.github.io](https://totp-extractor.github.io/); the alternate deployment is [totp.frolkin.top](https://totp.frolkin.top/).
+The public source repository is [totp-extractor/totp-extractor.github.io](https://github.com/totp-extractor/totp-extractor.github.io). The site is [totp-extractor.github.io](https://totp-extractor.github.io/). It runs entirely on GitHub Pages; no backend service is required.
 
-## HTTP language negotiation on static hosting
+## Language selection
 
-The root page chooses its language from the actual `Accept-Language` header via `/api/locale`, respecting `q` weights and region tags. English is the fallback. A manual language choice is stored in `language`; the theme is stored in `theme`. Explicit `/ru/`, `/en/`, etc. URLs select their own language.
+Explicit `/ru/`, `/en/`, etc. URLs select their own language. On the root URL, a saved manual choice takes priority; otherwise the app uses `navigator.languages`, matching supported languages and region tags in preference order. English is the fallback. Only manual language and theme choices are persisted in localStorage.
 
-GitHub Pages cannot run a header-processing server. The Pages build therefore uses the existing `https://totp.frolkin.top/api/locale` endpoint with omitted credentials and no referrer. That endpoint returns only a locale and allows `https://totp-extractor.github.io` and the previous `https://ivanpadavan.github.io` origin. Images, keys, account names and OTP links are never included. Localized URLs do not need that request. If the endpoint is unavailable, the root page remains usable in English and the language selector still works.
-
-Configure `VITE_LOCALE_ENDPOINT` to change the endpoint. The root-domain Dokploy build uses its own same-origin endpoint. No automatic choice is persisted; a manual selection takes priority on the root URL.
+GitHub Pages cannot read an HTTP `Accept-Language` header at runtime. Browser language detection runs locally when JavaScript starts, without API calls or an external locale service. The build already includes complete HTML and localized metadata for every language URL.
 
 ## Search and sharing metadata
 
 `npm run build` prerenders the real application shell in English plus 16 localized routes. Every page has a localized title, description, canonical URL, `hreflang` alternates, Open Graph/Twitter metadata and WebApplication structured data. The build emits `robots.txt`, `sitemap.xml` and a social preview image. It uses no invented ratings or reviews and adds no keyword stuffing.
 
-`VITE_SITE_URL` controls canonical URLs and the deployment subpath; it defaults to `https://totp.frolkin.top/`. `npm run build:pages` configures the GitHub Pages URL instead. Both deployments build from the same repository. GitHub Pages uses the organization domain without a repository path.
+`VITE_SITE_URL` controls canonical URLs and the deployment subpath; it defaults to `https://totp-extractor.github.io/`. `npm run build:pages` configures the GitHub Pages URL instead. GitHub Pages uses the organization domain without a repository path.
 
 Titles and structured data never contain imported account data or keys. The application keeps the work interface compact; the README explains the wider use case. Metadata helps describe the site; indexing and search rankings are not guaranteed.
 
@@ -56,7 +54,7 @@ Input supports standard TOTP/HOTP `otpauth://` links and Google Authenticator mi
 
 Image imports are limited to 20 MiB and 40 megapixels, with up to 64 QR codes per image. Multiple migration parts are tracked and duplicate entries are skipped. JSON and CSV are outputs only.
 
-Browser tests cover screenshots, camera frames, denial of camera permission, multipart exports, copied keys, JSON/CSV, QR roundtrips, both themes, language switches, RTL and HTTP negotiation. Camera tests use a synthetic MediaStream; real camera hardware needs device testing.
+Browser tests cover screenshots, camera frames, denial of camera permission, multipart exports, copied keys, JSON/CSV, QR roundtrips, both themes, language switches, RTL, browser language preferences and operation without external requests. Camera tests use a synthetic MediaStream; real camera hardware needs device testing.
 
 ## Privacy and third-party notices
 

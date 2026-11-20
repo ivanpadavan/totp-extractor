@@ -35,7 +35,7 @@ test('explicit language URLs override browser preference and switching keeps the
   await expect(page).toHaveURL(/\/ru\/$/);
   await expect(page.locator('#count')).toHaveText('1');
   await expect(page).toHaveTitle(`TOTP Extractor — ${seoTitles.ru}`);
-  expect(await page.locator('link[rel=canonical]').getAttribute('href')).toBe(new URL('ru/',baseURL!.startsWith('http://127.0.0.1') ? 'https://totp.frolkin.top/' : baseURL!).href);
+  expect(await page.locator('link[rel=canonical]').getAttribute('href')).toBe(new URL('ru/',baseURL!.startsWith('http://127.0.0.1') ? 'https://totp-extractor.github.io/' : baseURL!).href);
   expect(await page.evaluate(() => (window as any).violations)).toEqual([]);
   expect(await page.title()).not.toContain('alice');
 });

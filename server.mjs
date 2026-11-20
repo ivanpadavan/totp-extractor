@@ -3,7 +3,6 @@ import { createReadStream, readFileSync } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { negotiateLocale } from './src/locale.ts';
 
 const headers = {
   'Content-Security-Policy': "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' blob: data:; connect-src 'self'; font-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
@@ -20,7 +19,6 @@ export function createApp(root = resolve('dist'), basePath = '/') {
     const security = JSON.parse(readFileSync(resolve(root,'seo-security.json'),'utf8'));
     const hashes = security.hashes.filter(value => /^'sha256-[A-Za-z0-9+/=]+'$/.test(value));
     policy = policy.replace("'wasm-unsafe-eval'",`'wasm-unsafe-eval' ${hashes.join(' ')}`);
-    if (security.connectOrigin) policy = policy.replace("connect-src 'self'",`connect-src 'self' ${new URL(security.connectOrigin).origin}`);
   } catch { /* Development and tests may start before the static build. */ }
   return createServer(async (req, res) => {
     for (const [name,value] of Object.entries(headers)) res.setHeader(name,value);
@@ -37,17 +35,6 @@ export function createApp(root = resolve('dist'), basePath = '/') {
       pathname = '/' + pathname.slice(basePath.length);
     }
     if (pathname === '/health') { send(200,'text/plain','ok'); return; }
-    if (pathname === '/api/locale') {
-      const locale = negotiateLocale(req.headers['accept-language']);
-      res.setHeader('Vary','Accept-Language');
-      if (['https://ivanpadavan.github.io', 'https://totp-extractor.github.io'].includes(req.headers.origin)) {
-        res.setHeader('Access-Control-Allow-Origin',req.headers.origin);
-        res.setHeader('Vary','Accept-Language, Origin');
-      }
-      res.setHeader('Content-Language',locale);
-      send(200,'application/json; charset=utf-8',JSON.stringify({locale}));
-      return;
-    }
     let path = resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname));
     if (!path.startsWith(root + sep) || pathname.includes('\0') || pathname.split('/').some(p => p.startsWith('.'))) { send(404,'text/plain','Not found'); return; }
     try {

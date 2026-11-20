@@ -14,7 +14,7 @@ import ko from './locales/ko';
 import ar from './locales/ar';
 import hi from './locales/hi';
 import id from './locales/id';
-import { isLocale, type Locale } from './locale';
+import { isLocale, negotiateLocale, type Locale } from './locale';
 
 export function localeFromPath(path: string, base: string): Locale | undefined {
   if (!path.startsWith(base)) return;
@@ -31,15 +31,9 @@ export function setLocale(next: Locale) { locale = next; }
 export function t(key: MessageKey, values: Values = {}): string {
   return catalogs[locale][key].replace(/\{(\w+)\}/g, (_, name: string) => String(values[name] ?? `{${name}}`));
 }
-export async function initialLocale(): Promise<Locale> {
+export function initialLocale(): Locale {
   const explicit = localeFromPath(location.pathname, import.meta.env.BASE_URL);
   if (explicit) return explicit;
   try { const saved = localStorage.getItem('language'); if (isLocale(saved)) return saved; } catch { /* Storage may be disabled. */ }
-  // The endpoint negotiates the actual HTTP Accept-Language header. It does
-  // not use navigator.language, which can differ from request preferences.
-  try {
-    const response = await fetch(import.meta.env.VITE_LOCALE_ENDPOINT || `${import.meta.env.BASE_URL}api/locale`, { cache: 'no-store', credentials:'omit', referrerPolicy:'no-referrer', signal: AbortSignal.timeout(4000) });
-    if (response.ok) { const data = await response.json(); if (isLocale(data.locale)) return data.locale; }
-  } catch { /* Keep the app usable if locale negotiation is unavailable. */ }
-  return 'en';
+  return negotiateLocale((navigator.languages?.length ? navigator.languages : [navigator.language]).join(','));
 }

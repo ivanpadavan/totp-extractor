@@ -53,7 +53,7 @@ test('image extraction, reveal, copy, QR roundtrip, export and clear', async ({ 
   expect(await page.evaluate(() => ({local:{...localStorage},session:{...sessionStorage},cookie:document.cookie}))).toEqual({local:{},session:{},cookie:''});
   await page.reload(); await expect(page.locator('#count')).toHaveText('0');
   const origin = new URL(page.url()).origin;
-  expect(requests.every(r => r.method === 'GET' && (r.url.startsWith(origin + '/') || r.url === 'https://totp.frolkin.top/api/locale'))).toBe(true);
+  expect(requests.every(r => r.method === 'GET' && r.url.startsWith(origin + '/'))).toBe(true);
   expect(errors).toEqual([]);
 });
 

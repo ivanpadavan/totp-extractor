@@ -7,7 +7,6 @@ import { siteName, defaultSiteUrl } from '../src/site.ts';
 
 const siteUrl = new URL(process.env.VITE_SITE_URL || defaultSiteUrl).href;
 const base = new URL(siteUrl).pathname;
-const connect = process.env.VITE_LOCALE_ENDPOINT ? ` ${new URL(process.env.VITE_LOCALE_ENDPOINT).origin}` : '';
 const source = await readFile('dist/index.html','utf8');
 const escape = (s: string) => s.replace(/[&<>"']/g,c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]!);
 const hashes = new Set<string>();
@@ -22,7 +21,7 @@ function page(locale: Locale, root = false) {
   }).replace(/</g,'\\u003c');
   const hash = `'sha256-${createHash('sha256').update(data).digest('base64')}'`;
   hashes.add(hash);
-  const csp = `default-src 'none'; script-src 'self' 'wasm-unsafe-eval' ${hash}; style-src 'self'; img-src 'self' blob: data:; font-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self'${connect}; base-uri 'none'; form-action 'none'`;
+  const csp = `default-src 'none'; script-src 'self' 'wasm-unsafe-eval' ${hash}; style-src 'self'; img-src 'self' blob: data:; font-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; connect-src 'self'; base-uri 'none'; form-action 'none'`;
   const extra = `
     <meta name="robots" content="index,follow,max-image-preview:large">
     <meta name="referrer" content="no-referrer">
@@ -59,5 +58,5 @@ await writeFile('dist/.nojekyll','');
 await writeFile('dist/robots.txt',`User-agent: *\nAllow: ${base}\nDisallow: ${base}api/\nSitemap: ${new URL('sitemap.xml',siteUrl).href}\n`);
 const urls = [siteUrl,...languages.map(l => new URL(`${l.code}/`,siteUrl).href)];
 await writeFile('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(url => `<url><loc>${escape(url)}</loc></url>`).join('')}</urlset>\n`);
-await writeFile('dist/seo-security.json',JSON.stringify({hashes:[...hashes],connectOrigin:process.env.VITE_LOCALE_ENDPOINT ? new URL(process.env.VITE_LOCALE_ENDPOINT).origin : ''}));
+await writeFile('dist/seo-security.json',JSON.stringify({hashes:[...hashes]}));
 console.log(`Prerendered ${languages.length + 1} application pages for ${siteUrl}`);
