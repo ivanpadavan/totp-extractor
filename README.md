@@ -1,61 +1,44 @@
-# 2FA Key Extractor
+# 2FA Key Extractor — TOTP & HOTP QR decoder
 
-Extract authenticator secret keys from QR codes — directly in your browser.
+Extract 2FA secret keys from authenticator QR codes in your browser. Decode TOTP/HOTP setup codes and Google Authenticator exports, then save the keys to move your accounts to another authenticator app.
 
-Read **TOTP and HOTP setup QR codes**, decode **Google Authenticator exports**, and save portable keys as JSON, CSV or individual QR codes. Use an image, a screenshot, a camera or an `otpauth://` link.
+**[Open the app](https://ivanpadavan.github.io/totp-extractor/)** · [Русский](docs/README.ru.md) · [Python CLI](https://github.com/scito/extract_otp_secrets)
 
-**[Open on GitHub Pages](https://ivanpadavan.github.io/totp-extractor/)** · [Alternative hosting](https://totp.frolkin.top/) · [Русский](docs/README.ru.md) · [Development and deployment](docs/DEVELOPMENT.md)
+## How to use
 
-## One QR code. Portable keys.
+1. Upload a QR image, paste a screenshot, scan with your camera or paste an OTP link.
+2. Review the accounts and copy their Base32 secret keys.
+3. Export JSON, CSV or individual QR codes / PNG images.
 
-1. Add a QR image, paste a screenshot or scan with your camera.
-2. Review each account and reveal or copy its secret key.
-3. Download JSON, CSV or a QR code to use with another authenticator.
+Use a **setup or export QR code**: a screenshot of a rotating six-digit code cannot reveal the secret key.
 
-**TOTP** (time-based codes) and **HOTP** (counter-based codes) are open standards used by many authenticator apps. This tool reads their standard `otpauth://` setup links and QR codes. Google Authenticator’s `otpauth-migration://` export is supported as an additional input format.
+## Features
 
-## What you can do
+- Standard TOTP and HOTP QR codes and `otpauth://` links.
+- Google Authenticator `otpauth-migration://` exports, including multiple parts.
+- Multiple images or QR codes at once, with duplicate detection.
+- SHA-1/256/512, 6- or 8-digit codes and HOTP counters preserved.
+- 16 languages, light and dark themes, mobile layout and Arabic RTL.
 
-- Read multiple images and multiple QR codes in one image.
-- Scan with a phone or computer camera; paste screenshots or drag and drop files.
-- Track missing parts of a Google Authenticator export and skip duplicate accounts.
-- Copy Base32 secrets, download individual QR images, or export all accounts as JSON or CSV.
-- Preserve SHA-1, SHA-256 or SHA-512 settings, 6- or 8-digit codes and HOTP counters.
-- Work in 16 languages, with light/dark themes and an Arabic RTL layout.
+PNG, JPEG, WebP and BMP images are supported, up to 20 MiB and 40 megapixels each. JSON and CSV are export formats; importing them is not supported yet.
 
-Images and keys are processed locally. No account, database or secret upload is required. Only your language and theme preferences are saved in browser storage. Exported files contain unencrypted secrets, so keep them somewhere you trust.
+## Privacy
 
-## Supported formats
+Images and secret keys are processed locally in your browser and are never uploaded. Only language and theme preferences are saved in browser storage. Export files contain unencrypted secrets; store them securely.
 
-| Input | Support |
-| --- | --- |
-| Standard TOTP/HOTP setup QR or `otpauth://` link | Yes |
-| Google Authenticator export QR or `otpauth-migration://` link | Yes, including multiple parts |
-| PNG, JPEG, WebP or BMP images | Up to 20 MB and 40 megapixels per image |
-| Several links | One link per line |
+## Run locally
 
-**Outputs:** JSON, CSV, standard account QR codes and PNG images. Saved JSON/CSV files are export formats; importing them back is not implemented yet. A screenshot of a six-digit code cannot reveal its secret key — use the setup or export QR.
-
-## Run it yourself
-
-Node.js 24 or later:
+Requires Node.js 24+:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Docker:
+See [development and deployment](docs/DEVELOPMENT.md) for tests, Docker, GitHub Pages and language settings.
 
-```sh
-docker build -t 2fa-key-extractor .
-docker run --rm -p 8080:8080 2fa-key-extractor
-```
+## Python alternative and credits
 
-See [development and deployment](docs/DEVELOPMENT.md) for tests, GitHub Pages, language negotiation and SEO build settings.
+Prefer Python or the command line? Use [scito/extract_otp_secrets](https://github.com/scito/extract_otp_secrets), the project that inspired this web app. This is an independent implementation in TypeScript; Python source code was not copied.
 
-## Built with
-
-ZXing WASM, protobufjs, qrcode, Lucide, TypeScript and Vite. The interface and parser are independently implemented; the Google migration format follows the public Protobuf schema. Thanks to [extract_otp_secrets](https://github.com/scito/extract_otp_secrets) and [Aegis](https://github.com/beemdevelopment/Aegis) for documenting the format and migration use case.
-
-Third-party notices are included with the deployed app. This project is not affiliated with Google or any authenticator vendor.
+Built with ZXing WASM, protobufjs, qrcode, Lucide and Vite. Thanks to [Aegis](https://github.com/beemdevelopment/Aegis) for format documentation. Third-party notices ship with the app. Not affiliated with Google or other authenticator vendors.
