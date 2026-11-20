@@ -12,7 +12,7 @@ Turn an authenticator QR code into a secret key you can copy, back up or use in 
 2. **Get the secret keys.** Review the accounts and copy the key you need.
 3. **Save or transfer.** Download JSON or CSV for backup, or scan an individual account QR code with your new authenticator.
 
-No installation or sign-up required. Works on phones and computers.
+**Zero configuration.** No installation or sign-up required. Works on phones and computers.
 
 ## 📷 Supported QR codes and exports
 
