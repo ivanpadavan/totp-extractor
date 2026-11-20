@@ -111,7 +111,10 @@ test('camera reads actual video frames and releases stream on tab switch', async
   await page.goto('/'); await page.getByRole('tab',{name:'Камера'}).click();
   await page.locator('#start-camera').click();
   await expect(page.locator('#count')).toHaveText('1');
-  await page.getByRole('tab',{name:'Файл'}).click();
+  await page.locator('#language').selectOption('ar');
+  expect(await page.evaluate(() => (window as any).testStream.getTracks().every((t:MediaStreamTrack)=>t.readyState==='live'))).toBe(true);
+  await expect(page.locator('#panel-camera')).toBeVisible();
+  await page.locator('#tab-image').click();
   expect(await page.evaluate(() => (window as any).testStream.getTracks().every((t:MediaStreamTrack)=>t.readyState==='ended'))).toBe(true);
 });
 

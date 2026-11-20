@@ -1,3 +1,4 @@
+import { LocalizedError } from '../src/errors.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { migration } from './fixtures.ts';
@@ -67,9 +68,9 @@ test('single-account migration accepts absent version and version 2', () => {
   }
 });
 test('invalid migration metadata has a specific error and is not mistaken for a missing QR', () => {
-  assert.throws(() => parseOtp(migration(0, 1, {version:-1})), /версия экспорта/);
-  for (const size of [-1, 1001]) assert.throws(() => parseOtp(migration(0, size)), /количество частей/);
-  for (const [index, size] of [[-1, 1], [1, 0], [2, 2]]) assert.throws(() => parseOtp(migration(index, size)), /номер части/);
+  assert.throws(() => parseOtp(migration(0, 1, {version:-1})), (error: unknown) => error instanceof LocalizedError && error.key === 'invalidVersion');
+  for (const size of [-1, 1001]) assert.throws(() => parseOtp(migration(0, size)), (error: unknown) => error instanceof LocalizedError && error.key === 'invalidBatchSize');
+  for (const [index, size] of [[-1, 1], [1, 0], [2, 2]]) assert.throws(() => parseOtp(migration(index, size)), (error: unknown) => error instanceof LocalizedError && error.key === 'invalidBatchIndex');
 });
 test('multi-account exports preserve accounts and multipart tracking with version 2', () => {
   const singleQr = parseOtp(migration(0, 0, {version:2}));
