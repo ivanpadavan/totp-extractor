@@ -1,46 +1,33 @@
-# TOTP Extractor — TOTP & HOTP QR decoder
+# TOTP Extractor — extract 2FA secret keys from QR codes
 
-Extract 2FA secret keys from authenticator QR codes in your browser. Decode TOTP/HOTP setup codes and Google Authenticator exports, then save the keys to move your accounts to another authenticator app.
+Turn an authenticator QR code into a secret key you can copy, back up or use in another 2FA app. **TOTP Extractor** decodes TOTP/HOTP setup QR codes and Google Authenticator exports directly in your browser.
 
-**[Open the app](https://totp-extractor.github.io/)** · [Русский](docs/README.ru.md) · [Python CLI](https://github.com/scito/extract_otp_secrets)
+**[Open TOTP Extractor](https://totp-extractor.github.io/)** · [Русский](docs/README.ru.md)
 
-## How to use
+## Move your 2FA accounts to another authenticator
 
-1. Upload a QR image, paste a screenshot, scan with your camera or paste an OTP link.
-2. Review the accounts and copy their Base32 secret keys.
-3. Export JSON, CSV or individual QR codes / PNG images.
+1. **Add your QR code.** Upload an image, paste a screenshot, scan with your camera or paste an `otpauth://` link.
+2. **Get the secret keys.** Review the accounts and copy the key you need.
+3. **Save or transfer.** Download JSON or CSV for backup, or scan an individual account QR code with your new authenticator.
 
-Use a **setup or export QR code**: a screenshot of a rotating six-digit code cannot reveal the secret key.
+No installation or sign-up required. Works on phones and computers.
 
-## Features
+## Supported QR codes and exports
 
-- Standard TOTP and HOTP QR codes and `otpauth://` links.
-- Google Authenticator `otpauth-migration://` exports, including multiple parts.
-- Multiple images or QR codes at once, with duplicate detection.
-- SHA-1/256/512, 6- or 8-digit codes and HOTP counters preserved.
-- 16 languages with automatic browser-language selection, light and dark themes, mobile layout and Arabic RTL.
+- **TOTP and HOTP setup codes** — extract the Base32 secret key and account settings from a standard authenticator QR code.
+- **Google Authenticator exports** — decode one account or several, including exports split across multiple QR codes.
+- **Images and screenshots** — read PNG, JPEG, WebP and BMP files, with multiple QR codes per image and duplicate detection.
 
-PNG, JPEG, WebP and BMP images are supported, up to 20 MiB and 40 megapixels each. JSON and CSV are export formats; importing them is not supported yet.
+Export accounts as **JSON, CSV or individual QR/PNG images**. JSON and CSV imports are not supported.
 
-## Privacy
+You need the **setup or export QR code**. A screenshot of a six-digit login code does not contain the secret key.
 
-Images and secret keys are processed locally in your browser and are never uploaded. Only language and theme preferences are saved in browser storage. Export files contain unencrypted secrets; store them securely.
+## Your keys stay in your browser
 
-## Run locally
+Images and secret keys are processed locally and are never uploaded to a server. Keep downloaded exports private: they contain your unencrypted 2FA secret keys.
 
-Requires Node.js 24+:
+## Prefer a Python tool?
 
-```sh
-npm ci
-npm run dev
-```
+See [scito/extract_otp_secrets](https://github.com/scito/extract_otp_secrets) for a Python command-line alternative. It is the project that inspired TOTP Extractor.
 
-See [development and deployment](docs/DEVELOPMENT.md) for tests, Docker, GitHub Pages and language settings.
-
-Open source under the [MIT license](LICENSE). Third-party libraries retain their own licenses.
-
-## Python alternative and credits
-
-Prefer Python or the command line? Use [scito/extract_otp_secrets](https://github.com/scito/extract_otp_secrets), the project that inspired this web app. This is an independent implementation in TypeScript; Python source code was not copied.
-
-Built with ZXing WASM, protobufjs, qrcode, Lucide and Vite. Thanks to [Aegis](https://github.com/beemdevelopment/Aegis) for format documentation. Third-party notices ship with the app. Not affiliated with Google or other authenticator vendors.
+Open source · [MIT license](LICENSE) · [Self-hosting and development](docs/DEVELOPMENT.md) · [Third-party notices](public/third-party-licenses.txt)
