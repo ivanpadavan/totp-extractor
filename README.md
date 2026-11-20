@@ -4,7 +4,7 @@ Extract authenticator secret keys from QR codes — directly in your browser.
 
 Read **TOTP and HOTP setup QR codes**, decode **Google Authenticator exports**, and save portable keys as JSON, CSV or individual QR codes. Use an image, a screenshot, a camera or an `otpauth://` link.
 
-**[Open the app](https://totp.frolkin.top/)** · [Русский](docs/README.ru.md) · [Development and deployment](docs/DEVELOPMENT.md)
+**[Open on GitHub Pages](https://ivanpadavan.github.io/totp-extractor/)** · [Alternative hosting](https://totp.frolkin.top/) · [Русский](docs/README.ru.md) · [Development and deployment](docs/DEVELOPMENT.md)
 
 ## One QR code. Portable keys.
 

@@ -4,7 +4,7 @@
 
 Считайте **QR настройки TOTP/HOTP** или **экспорт Google Authenticator** и сохраните ключи в JSON, CSV либо отдельные QR-коды. Подойдут изображение, скриншот, камера или ссылка `otpauth://`.
 
-**[Открыть приложение](https://totp.frolkin.top/)** · [English](../README.md) · [Разработка и публикация](DEVELOPMENT.md)
+**[Открыть на GitHub Pages](https://ivanpadavan.github.io/totp-extractor/)** · [Другой сервер](https://totp.frolkin.top/) · [English](../README.md) · [Разработка и публикация](DEVELOPMENT.md)
 
 ## Как пользоваться
 

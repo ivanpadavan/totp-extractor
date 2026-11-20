@@ -23,9 +23,9 @@ npm run build:pages
 
 This emits a complete static site in `dist/`, including a `.nojekyll` marker. Asset URLs work beneath `/totp-extractor/`. In GitHub Actions, `GITHUB_REPOSITORY` determines the project path, so a later repository rename only needs the public URL settings reviewed.
 
-A ready-to-install workflow is in [github-pages.workflow.yml](github-pages.workflow.yml). After Pages is available, install it as `.github/workflows/pages.yml` and select **Settings → Pages → GitHub Actions**. It builds on every push to `main`, runs the unit tests and deploys the generated artifact.
+GitHub Pages uses the workflow in [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). It builds on every push to `main`, runs the unit tests and deploys the generated artifact. A manual run is also available in the Actions tab. Pages is configured to use GitHub Actions as its publishing source.
 
-The Pages API currently rejects activation for the private source repository: **the account plan does not support GitHub Pages for this repository**. Enabling Pages requires a supported private-repository plan or an explicit decision about public publication. The source repository has not been made public or renamed.
+The source repository is public by the owner’s explicit decision. The current site is [ivanpadavan.github.io/totp-extractor](https://ivanpadavan.github.io/totp-extractor/). The repository name remains `totp-extractor`; a later rename is a separate decision.
 
 ## HTTP language negotiation on static hosting
 
