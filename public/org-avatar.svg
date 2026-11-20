@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">TOTP Extractor — QR code and key</title>
+  <rect width="512" height="512" fill="#111714"/>
+  <rect x="16" y="16" width="480" height="480" rx="64" fill="#19271e" stroke="#304136" stroke-width="3"/>
+  <g fill="#d4e7dc"><rect x="72" y="72" width="120" height="120" rx="12"/><rect x="320" y="72" width="120" height="120" rx="12"/><rect x="72" y="320" width="120" height="120" rx="12"/></g>
+  <g fill="#19271e"><rect x="88" y="88" width="88" height="88" rx="4"/><rect x="336" y="88" width="88" height="88" rx="4"/><rect x="88" y="336" width="88" height="88" rx="4"/></g>
+  <g fill="#d4e7dc"><rect x="110" y="110" width="44" height="44" rx="2"/><rect x="358" y="110" width="44" height="44" rx="2"/><rect x="110" y="358" width="44" height="44" rx="2"/></g>
+  <path fill="#83af95" d="M224 72h32v32h-32z M264 112h32v48h-32z M224 160h32v48h-32z M72 224h56v32H72z M160 224h32v64h-32z M224 232h64v32h-64z M328 224h32v32h-32z M400 224h40v32h-40z M72 272h32v16H72z M224 320h32v56h-32z M224 408h32v32h-32z"/>
+  <circle cx="354" cy="354" r="108" fill="#19271e"/>
+  <circle cx="354" cy="354" r="96" fill="#a5efcc"/>
+  <g fill="none" stroke="#183626" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="377" cy="331" r="27"/><path d="m357 351-63 63m24-24 17 17m-41-17 17 17"/></g>
+</svg>
