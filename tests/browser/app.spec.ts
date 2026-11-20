@@ -7,7 +7,7 @@ const secret = 'JBSWY3DPEHPK3PXP';
 const png = (data: string) => QRCode.toBuffer(data, { width: 600, margin: 4, errorCorrectionLevel: 'M' });
 
 test('single-account Google screenshot without multipart metadata imports successfully', async ({page}) => {
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   for (const url of [migration(0, 0, {single:true}), migration(0, 1, {single:true,version:2}), migration(0, 1, {single:true,version:null,omitGroup:true})]) {
     await page.locator('#file-input').setInputFiles({name:'IMG_2621.png',mimeType:'image/png',buffer:await png(url)});
     await expect(page.locator('#import-status')).toContainText('Распознано QR: 1. Новых аккаунтов: 1.');
@@ -25,7 +25,7 @@ test('image extraction, reveal, copy, QR roundtrip, export and clear', async ({ 
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('request', req => requests.push({url:req.url(),method:req.method()}));
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await page.locator('#file-input').setInputFiles({name:'account.png',mimeType:'image/png',buffer:await png(uri)});
   await expect(page.locator('#count')).toHaveText('1');
   await expect(page.locator('.secret-value')).not.toContainText(secret);
@@ -53,12 +53,12 @@ test('image extraction, reveal, copy, QR roundtrip, export and clear', async ({ 
   expect(await page.evaluate(() => ({local:{...localStorage},session:{...sessionStorage},cookie:document.cookie}))).toEqual({local:{},session:{},cookie:''});
   await page.reload(); await expect(page.locator('#count')).toHaveText('0');
   const origin = new URL(page.url()).origin;
-  expect(requests.every(r => r.method === 'GET' && r.url.startsWith(origin))).toBe(true);
+  expect(requests.every(r => r.method === 'GET' && (r.url.startsWith(origin + '/') || r.url === 'https://totp.frolkin.top/api/locale'))).toBe(true);
   expect(errors).toEqual([]);
 });
 
 test('multiple QR in one image and multipart migration deduplication', async ({page}) => {
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   const first=PNG.sync.read(await png(migration(0,2,{version:2})));
   const second=PNG.sync.read(await png(migration(1,2,{name:'charlie@example.com',version:2})));
   const combined=new PNG({width:1220,height:600,colorType:6}); combined.data.fill(255);
@@ -72,7 +72,7 @@ test('multiple QR in one image and multipart migration deduplication', async ({p
 });
 
 test('all accounts in one Google export import with version 2 and no batch size', async ({page}) => {
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await page.locator('#file-input').setInputFiles({name:'all-accounts.png',mimeType:'image/png',buffer:await png(migration(0,0,{version:2}))});
   await expect(page.locator('#import-status')).toContainText('Распознано QR: 1. Новых аккаунтов: 2.');
   await expect(page.locator('#count')).toHaveText('2');
@@ -81,7 +81,7 @@ test('all accounts in one Google export import with version 2 and no batch size'
 });
 
 test('multipart status, malicious labels, invalid inputs and keyboard tabs', async ({page}) => {
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await page.getByRole('tab',{name:'Ссылка'}).click();
   await page.locator('#uri-input').fill(migration(0,2,{name:'<img src=x onerror=alert(1)>'}));
   await page.locator('#parse-text').click();
@@ -108,7 +108,7 @@ test('camera reads actual video frames and releases stream on tab switch', async
       return stream;
     }});
   },dataUrl);
-  await page.goto('/'); await page.getByRole('tab',{name:'Камера'}).click();
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru'); await page.getByRole('tab',{name:'Камера'}).click();
   await page.locator('#start-camera').click();
   await expect(page.locator('#count')).toHaveText('1');
   await page.locator('#language').selectOption('ar');
@@ -120,14 +120,14 @@ test('camera reads actual video frames and releases stream on tab switch', async
 
 test('denied camera permission offers file fallback', async ({page}) => {
   await page.addInitScript(() => { Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{throw new DOMException('Denied','NotAllowedError');}}); });
-  await page.goto('/'); await page.getByRole('tab',{name:'Камера'}).click(); await page.locator('#start-camera').click();
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru'); await page.getByRole('tab',{name:'Камера'}).click(); await page.locator('#start-camera').click();
   await expect(page.locator('#import-status')).toContainText('Доступ к камере запрещён');
   await expect(page.locator('#take-photo')).toBeVisible();
   expect(await page.locator('#capture-input').getAttribute('capture')).toBe('environment');
 });
 
 test('light and dark themes, persistence, responsive layout and screenshots', async ({page},testInfo) => {
-  await page.emulateMedia({colorScheme:'light'}); await page.goto('/');
+  await page.emulateMedia({colorScheme:'light'}); await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await expect(page.locator('html')).toHaveAttribute('data-theme','light');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({path:`test-results/${testInfo.project.name}-light.png`,fullPage:true});
@@ -139,7 +139,7 @@ test('light and dark themes, persistence, responsive layout and screenshots', as
 });
 
 test('paste and drag-and-drop image input', async ({page}) => {
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   const data = (await png(uri)).toString('base64');
   await page.evaluate(async b64 => {
     const blob=new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:'image/png'});

@@ -24,7 +24,9 @@ let generation = 0, busy = false, stream: MediaStream | null = null, cameraEpoch
 let activeTab = 'image';
 let toastTimer: ReturnType<typeof setTimeout>;
 
-setLocale(await initialLocale());
+const initialLanguage = initialLocale();
+let languageRevision = 0;
+setLocale(isLocale(document.documentElement.lang) ? document.documentElement.lang : 'en');
 $('#app').innerHTML = renderShell(getLocale(), import.meta.env.BASE_URL);
 
 icons();
@@ -273,10 +275,23 @@ function translatePage() {
 $('#language').onchange = e => {
   const next = (e.target as HTMLSelectElement).value;
   if (!isLocale(next)) return;
+  languageRevision++;
   setLocale(next);
   try { localStorage.setItem('language',next); } catch { /* Preference is optional. */ }
   history.pushState({}, '', `${import.meta.env.BASE_URL}${next}/`);
   translatePage();
 };
-window.addEventListener('popstate', async () => { setLocale(await initialLocale()); translatePage(); });
+window.addEventListener('popstate', async () => {
+  const revision = ++languageRevision;
+  const locale = await initialLocale();
+  if (revision !== languageRevision) return;
+  setLocale(locale);
+  translatePage();
+});
 translatePage();
+$('#app').dataset.ready = 'true';
+void initialLanguage.then(locale => {
+  if (languageRevision) return;
+  setLocale(locale);
+  translatePage();
+});

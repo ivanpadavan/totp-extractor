@@ -4,7 +4,7 @@ import { languages } from '../../src/locale';
 
 const uri = 'otpauth://totp/Example:alice%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Example';
 test('all languages translate UI, errors and dialogs while preserving accounts and input', async ({page}, info) => {
-  await page.goto('/');
+  await page.goto('./'); await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await page.locator('#tab-text').click();
   await page.locator('#uri-input').fill(uri);
   await page.locator('#parse-text').click();
@@ -51,4 +51,27 @@ test('HTTP Accept-Language takes priority over navigator language; saved choice 
     await page.reload(); await expect(page.locator('html')).toHaveAttribute('lang','ja');
     await expect(page.locator('h1')).toHaveText(catalogs.ja.title);
   } finally { await context.close(); }
+});
+
+test('import works while HTTP locale is pending and a manual choice wins over a late response', async ({page}) => {
+  let release!: () => void;
+  const waiting = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/locale',async route => {
+    await waiting;
+    await route.fulfill({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify({locale:'ru'})});
+  });
+  await page.goto('./');
+  await expect(page.locator('#app')).toHaveAttribute('data-ready','true');
+  await page.locator('#tab-text').click();
+  await page.locator('#uri-input').fill(uri);
+  await page.locator('#parse-text').click();
+  await expect(page.locator('#count')).toHaveText('1');
+  await page.locator('#language').selectOption('de');
+  const reply = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/api/locale'));
+  release();
+  await (await reply).finished();
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  await expect(page.locator('html')).toHaveAttribute('lang','de');
+  await expect(page.locator('#count')).toHaveText('1');
+  await expect(page.locator('.account-name')).toHaveText('alice@example.com');
 });
