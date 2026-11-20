@@ -8,7 +8,7 @@ import { renderShell } from '../src/shell.ts';
 test('universal naming and localized metadata describe only supported features', () => {
   for (const {code} of languages) {
     const m = pageMetadata(code,'https://example.com/tool/');
-    assert.ok(m.title.startsWith('2FA Key Extractor — '));
+    assert.ok(m.title.startsWith('TOTP Extractor — '));
     assert.ok(seoTitles[code].includes('TOTP'));
     assert.ok(m.description.includes('TOTP'));
     assert.equal(m.canonical,`https://example.com/tool/${code}/`);

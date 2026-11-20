@@ -40,7 +40,7 @@ export function createApp(root = resolve('dist'), basePath = '/') {
     if (pathname === '/api/locale') {
       const locale = negotiateLocale(req.headers['accept-language']);
       res.setHeader('Vary','Accept-Language');
-      if (req.headers.origin === 'https://ivanpadavan.github.io') {
+      if (['https://ivanpadavan.github.io', 'https://totp-extractor.github.io'].includes(req.headers.origin)) {
         res.setHeader('Access-Control-Allow-Origin',req.headers.origin);
         res.setHeader('Vary','Accept-Language, Origin');
       }

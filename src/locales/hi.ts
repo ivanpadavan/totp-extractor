@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — होम",
+  "home": "TOTP Extractor — होम",
   "local": "आपके ब्राउज़र में प्रोसेस होता है",
   "help": "सहायता",
   "language": "भाषा",

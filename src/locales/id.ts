@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — beranda",
+  "home": "TOTP Extractor — beranda",
   "local": "Diproses di browser Anda",
   "help": "Bantuan",
   "language": "Bahasa",

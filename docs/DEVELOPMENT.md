@@ -28,17 +28,17 @@ The Docker build runs unit tests and produces the application before switching t
 npm run build:pages
 ```
 
-This emits a complete static site in `dist/`, including a `.nojekyll` marker. Asset URLs work beneath `/totp-extractor/`. In GitHub Actions, `GITHUB_REPOSITORY` determines the project path, so a later repository rename only needs the public URL settings reviewed.
+This emits a complete static site in `dist/`, including a `.nojekyll` marker. Asset URLs work beneath the deployment path. In GitHub Actions, `GITHUB_REPOSITORY` determines the URL: a project repository uses `/<repository>/`, while an organization site repository named `<owner>.github.io` uses `/`. The repository `totp-extractor/totp-extractor.github.io` publishes at the root of `https://totp-extractor.github.io/`.
 
 GitHub Pages uses the workflow in [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). It builds on every push to `main`, runs the unit tests and deploys the generated artifact. A manual run is also available in the Actions tab. Pages is configured to use GitHub Actions as its publishing source.
 
-The source repository is public by the owner’s explicit decision. The current site is [ivanpadavan.github.io/totp-extractor](https://ivanpadavan.github.io/totp-extractor/). The repository name remains `totp-extractor`; a later rename is a separate decision.
+The public source repository is [totp-extractor/totp-extractor.github.io](https://github.com/totp-extractor/totp-extractor.github.io). The main site is [totp-extractor.github.io](https://totp-extractor.github.io/); the alternate deployment is [totp.frolkin.top](https://totp.frolkin.top/).
 
 ## HTTP language negotiation on static hosting
 
 The root page chooses its language from the actual `Accept-Language` header via `/api/locale`, respecting `q` weights and region tags. English is the fallback. A manual language choice is stored in `language`; the theme is stored in `theme`. Explicit `/ru/`, `/en/`, etc. URLs select their own language.
 
-GitHub Pages cannot run a header-processing server. The Pages build therefore uses the existing `https://totp.frolkin.top/api/locale` endpoint with omitted credentials and no referrer. That endpoint returns only a locale and allows the `https://ivanpadavan.github.io` origin. Images, keys, account names and OTP links are never included. Localized URLs do not need that request. If the endpoint is unavailable, the root page remains usable in English and the language selector still works.
+GitHub Pages cannot run a header-processing server. The Pages build therefore uses the existing `https://totp.frolkin.top/api/locale` endpoint with omitted credentials and no referrer. That endpoint returns only a locale and allows `https://totp-extractor.github.io` and the previous `https://ivanpadavan.github.io` origin. Images, keys, account names and OTP links are never included. Localized URLs do not need that request. If the endpoint is unavailable, the root page remains usable in English and the language selector still works.
 
 Configure `VITE_LOCALE_ENDPOINT` to change the endpoint. The root-domain Dokploy build uses its own same-origin endpoint. No automatic choice is persisted; a manual selection takes priority on the root URL.
 
@@ -46,7 +46,7 @@ Configure `VITE_LOCALE_ENDPOINT` to change the endpoint. The root-domain Dokploy
 
 `npm run build` prerenders the real application shell in English plus 16 localized routes. Every page has a localized title, description, canonical URL, `hreflang` alternates, Open Graph/Twitter metadata and WebApplication structured data. The build emits `robots.txt`, `sitemap.xml` and a social preview image. It uses no invented ratings or reviews and adds no keyword stuffing.
 
-`VITE_SITE_URL` controls canonical URLs and the deployment subpath; it defaults to `https://totp.frolkin.top/`. `npm run build:pages` configures the GitHub Pages URL instead. The current repository name and production domain remain unchanged pending review.
+`VITE_SITE_URL` controls canonical URLs and the deployment subpath; it defaults to `https://totp.frolkin.top/`. `npm run build:pages` configures the GitHub Pages URL instead. Both deployments build from the same repository. GitHub Pages uses the organization domain without a repository path.
 
 Titles and structured data never contain imported account data or keys. The application keeps the work interface compact; the README explains the wider use case. Metadata helps describe the site; indexing and search rankings are not guaranteed.
 

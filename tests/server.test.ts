@@ -15,6 +15,10 @@ test('locale endpoint negotiates actual headers without caching or accepting upl
       assert.equal(r.headers.get('Cache-Control'),'no-store');
       assert.equal(r.headers.get('Vary'),'Accept-Language');
     }
+    for (const origin of ['https://totp-extractor.github.io','https://ivanpadavan.github.io','https://example.com']) {
+      const response = await fetch(base+'/api/locale',{headers:{Origin:origin,'Accept-Language':'ru'}});
+      assert.equal(response.headers.get('Access-Control-Allow-Origin'), origin === 'https://example.com' ? null : origin);
+    }
     assert.equal((await fetch(base+'/health')).status,200);
     assert.equal((await fetch(base+'/api/locale',{method:'POST',body:'test'})).status,405);
     assert.equal((await fetch(base+'/%2e%2e/server.mjs')).status,404);

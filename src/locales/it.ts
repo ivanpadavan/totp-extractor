@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — home",
+  "home": "TOTP Extractor — home",
   "local": "Elaborazione nel browser",
   "help": "Aiuto",
   "language": "Lingua",

@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — ホーム",
+  "home": "TOTP Extractor — ホーム",
   "local": "ブラウザー内で処理",
   "help": "ヘルプ",
   "language": "言語",

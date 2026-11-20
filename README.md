@@ -1,8 +1,8 @@
-# 2FA Key Extractor — TOTP & HOTP QR decoder
+# TOTP Extractor — TOTP & HOTP QR decoder
 
 Extract 2FA secret keys from authenticator QR codes in your browser. Decode TOTP/HOTP setup codes and Google Authenticator exports, then save the keys to move your accounts to another authenticator app.
 
-**[Open the app](https://ivanpadavan.github.io/totp-extractor/)** · [Русский](docs/README.ru.md) · [Python CLI](https://github.com/scito/extract_otp_secrets)
+**[Open the app](https://totp-extractor.github.io/)** · [Русский](docs/README.ru.md) · [Python CLI](https://github.com/scito/extract_otp_secrets)
 
 ## How to use
 
@@ -36,6 +36,8 @@ npm run dev
 ```
 
 See [development and deployment](docs/DEVELOPMENT.md) for tests, Docker, GitHub Pages and language settings.
+
+Open source under the [MIT license](LICENSE). Third-party libraries retain their own licenses.
 
 ## Python alternative and credits
 

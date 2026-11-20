@@ -1,5 +1,6 @@
 import { t, setLocale, type MessageKey } from './i18n';
 import { languages, type Locale } from './locale';
+import { siteName } from './site';
 
 const escape = (s: string) => s.replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]!);
 const icon = (name: string) => `<i data-lucide="${name}" aria-hidden="true"></i>`;
@@ -9,7 +10,7 @@ export function renderShell(locale: Locale, base = '/') {
   setLocale(locale);
 const label = (key: MessageKey) => `<span data-i18n="${key}">${escape(t(key))}</span>`;
 return `
-  <header class="site-header"><a class="brand" href="${base}" data-i18n-attr="aria-label:home" aria-label="${t('home')}">${icon('key-round')}<span>2FA Key Extractor</span></a><div class="header-actions"><span class="privacy-pill">${icon('lock-keyhole')} ${label('local')}</span><label class="language-control">${icon('languages')}<select id="language" aria-label="${t('language')}" data-i18n-attr="aria-label:language">${languages.map(l => `<option value="${l.code}" lang="${l.code}" dir="${l.code === 'ar' ? 'rtl' : 'ltr'}">${l.name}</option>`).join('')}</select><span class="select-chevron" aria-hidden="true"></span></label><button id="help" class="icon-button" data-i18n-attr="aria-label:help" aria-label="${t('help')}">${icon('circle-help')}</button><button id="theme-toggle" class="icon-button theme-toggle" aria-label="${t('lightTheme')}">${icon('sun')}</button></div></header>
+  <header class="site-header"><a class="brand" href="${base}" data-i18n-attr="aria-label:home" aria-label="${t('home')}">${icon('key-round')}<span>${siteName}</span></a><div class="header-actions"><span class="privacy-pill">${icon('lock-keyhole')} ${label('local')}</span><label class="language-control">${icon('languages')}<select id="language" aria-label="${t('language')}" data-i18n-attr="aria-label:language">${languages.map(l => `<option value="${l.code}" lang="${l.code}" dir="${l.code === 'ar' ? 'rtl' : 'ltr'}">${l.name}</option>`).join('')}</select><span class="select-chevron" aria-hidden="true"></span></label><button id="help" class="icon-button" data-i18n-attr="aria-label:help" aria-label="${t('help')}">${icon('circle-help')}</button><button id="theme-toggle" class="icon-button theme-toggle" aria-label="${t('lightTheme')}">${icon('sun')}</button></div></header>
   <main>
     <div class="page-heading"><div><h1>${label('title')}</h1><p>${label('subtitle')}</p></div></div>
     <div class="workspace">

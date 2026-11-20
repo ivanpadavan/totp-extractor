@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — ana sayfa",
+  "home": "TOTP Extractor — ana sayfa",
   "local": "Tarayıcınızda işlenir",
   "help": "Yardım",
   "language": "Dil",

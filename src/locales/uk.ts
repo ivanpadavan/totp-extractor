@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — головна",
+  "home": "TOTP Extractor — головна",
   "local": "Обробка в браузері",
   "help": "Довідка",
   "language": "Мова",

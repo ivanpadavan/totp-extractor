@@ -1,5 +1,5 @@
 export default {
-  "home": "2FA Key Extractor — 首页",
+  "home": "TOTP Extractor — 首页",
   "local": "在浏览器中处理",
   "help": "帮助",
   "language": "语言",

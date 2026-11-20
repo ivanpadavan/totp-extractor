@@ -38,7 +38,7 @@ function page(locale: Locale, root = false) {
     <meta property="og:image" content="${meta.image}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="2FA Key Extractor — TOTP and HOTP keys from QR codes">
+    <meta property="og:image:alt" content="${siteName} — TOTP and HOTP keys from QR codes">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${escape(meta.title)}">
     <meta name="twitter:description" content="${escape(meta.description)}">
