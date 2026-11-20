@@ -1,0 +1,121 @@
+import { Reader } from 'protobufjs/minimal';
+
+export interface Account {
+  name: string;
+  issuer: string;
+  secret: string;
+  type: 'totp' | 'hotp';
+  algorithm: 'SHA1' | 'SHA256' | 'SHA512';
+  digits: number;
+  period: number;
+  counter: string;
+}
+export interface Parsed {
+  accounts: Account[];
+  batch?: { id: number; size: number; index: number };
+}
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+export function base32(bytes: Uint8Array): string {
+  let bits = 0, value = 0, output = '';
+  for (const byte of bytes) {
+    value = (value << 8) | byte;
+    bits += 8;
+    while (bits >= 5) { output += alphabet[(value >>> (bits -= 5)) & 31]; }
+  }
+  if (bits) output += alphabet[(value << (5 - bits)) & 31];
+  return output;
+}
+function secret(value: string): string {
+  const normalized = value.replace(/\s/g, '').toUpperCase();
+  if (!/^[A-Z2-7]+={0,6}$/.test(normalized)) throw new Error('Некорректный ключ Base32.');
+  const unpadded = normalized.replace(/=+$/, '');
+  if (![0, 2, 4, 5, 7].includes(unpadded.length % 8)) throw new Error('Некорректная длина ключа Base32.');
+  const remainder = (unpadded.length * 5) % 8;
+  if (remainder && (alphabet.indexOf(unpadded.at(-1)!) & ((1 << remainder) - 1))) throw new Error('Некорректные завершающие биты Base32.');
+  return unpadded;
+}
+function integer(value: string | null, fallback: number, max: number): number {
+  if (value === null) return fallback;
+  if (!/^\d+$/.test(value) || Number(value) < 1 || Number(value) > max) throw new Error('Некорректные параметры OTP.');
+  return Number(value);
+}
+function parseAccount(reader: Reader, end: number): Account {
+  let raw = new Uint8Array(), name = '', issuer = '', algorithm = 0, digits = 0, type = 0, counter = '0';
+  while (reader.pos < end) {
+    const tag = reader.uint32();
+    switch (tag >>> 3) {
+      case 1: raw = Uint8Array.from(reader.bytes()); break;
+      case 2: name = reader.string(); break;
+      case 3: issuer = reader.string(); break;
+      case 4: algorithm = reader.int32(); break;
+      case 5: digits = reader.int32(); break;
+      case 6: type = reader.int32(); break;
+      case 7: counter = reader.uint64().toString(); break;
+      default: reader.skipType(tag & 7);
+    }
+  }
+  if (reader.pos !== end || !raw.length) throw new Error('В экспорте отсутствует секретный ключ.');
+  if (![1, 2, 3].includes(algorithm) || ![1, 2].includes(digits) || ![1, 2].includes(type)) throw new Error('Неподдерживаемые параметры в экспорте Google.');
+  if (BigInt(counter) > 9223372036854775807n) throw new Error('Некорректный счётчик HOTP.');
+  return { name: name || issuer || 'Без имени', issuer, secret: base32(raw), algorithm: (['SHA1', 'SHA256', 'SHA512'] as const)[algorithm - 1], digits: digits === 1 ? 6 : 8, type: type === 1 ? 'hotp' : 'totp', period: 30, counter };
+}
+export function parseOtp(input: string): Parsed {
+  if (input.length > 100000) throw new Error('Слишком большой QR-код.');
+  let url: URL;
+  try { url = new URL(input.trim()); } catch { throw new Error('Ожидается ссылка otpauth:// или otpauth-migration://.'); }
+  if (url.protocol === 'otpauth:') {
+    if (!['totp', 'hotp'].includes(url.hostname)) throw new Error('Поддерживаются TOTP и HOTP.');
+    const p = url.searchParams;
+    for (const key of ['secret', 'issuer', 'algorithm', 'digits', 'period', 'counter']) if (p.getAll(key).length > 1) throw new Error('Повторяющиеся параметры OTP.');
+    const key = secret(p.get('secret') || '');
+    let label: string;
+    try { label = decodeURIComponent(url.pathname.slice(1)); } catch { throw new Error('Некорректное имя аккаунта.'); }
+    const divider = label.indexOf(':');
+    const issuer = p.get('issuer') || (divider >= 0 ? label.slice(0, divider) : '');
+    const algorithm = (p.get('algorithm') || 'SHA1').toUpperCase();
+    if (!['SHA1', 'SHA256', 'SHA512'].includes(algorithm)) throw new Error('Неподдерживаемый алгоритм OTP.');
+    const digits = integer(p.get('digits'), 6, 8);
+    if (![6, 8].includes(digits)) throw new Error('Поддерживаются коды из 6 или 8 цифр.');
+    const counter = p.get('counter') || '0';
+    if (!/^\d{1,20}$/.test(counter) || BigInt(counter) > 18446744073709551615n || (url.hostname === 'hotp' && !p.has('counter'))) throw new Error('Некорректный счётчик HOTP.');
+    return { accounts: [{ name: (divider >= 0 ? label.slice(divider + 1).trim() : label) || 'Без имени', issuer, secret: key, type: url.hostname as Account['type'], algorithm: algorithm as Account['algorithm'], digits, period: integer(p.get('period'), 30, 86400), counter: BigInt(counter).toString() }] };
+  }
+  if (url.protocol !== 'otpauth-migration:' || url.hostname !== 'offline') throw new Error('Этот QR не содержит ключей OTP.');
+  try {
+    if (url.searchParams.getAll('data').length !== 1) throw new Error('Некорректный экспорт Google.');
+    const encoded = (url.searchParams.get('data') || '').replace(/ /g, '+').replace(/-/g, '+').replace(/_/g, '/');
+    const reader = Reader.create(Uint8Array.from(atob(encoded), c => c.charCodeAt(0)));
+    const accounts: Account[] = [];
+    let version = 0, size = 1, index = 0, id = 0;
+    while (reader.pos < reader.len) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: { const length = reader.uint32(); const end = reader.pos + length; if (end > reader.len) throw new Error('Повреждённый экспорт.'); accounts.push(parseAccount(reader, end)); break; }
+        case 2: version = reader.int32(); break;
+        case 3: size = reader.int32(); break;
+        case 4: index = reader.int32(); break;
+        case 5: id = reader.int32(); break;
+        default: reader.skipType(tag & 7);
+      }
+    }
+    if (version !== 1 || !accounts.length || size < 1 || size > 1000 || index < 0 || index >= size) throw new Error('Неподдерживаемый или неполный экспорт Google.');
+    return { accounts, batch: { id, size, index } };
+  } catch (error) {
+    if (error instanceof Error && /экспорт|параметр|ключ|счётчик/.test(error.message)) throw error;
+    throw new Error('Не удалось прочитать экспорт Google. QR-код повреждён.');
+  }
+}
+export function accountId(a: Account): string {
+  return JSON.stringify([a.secret, a.name, a.issuer, a.type, a.algorithm, a.digits, a.period, a.counter]);
+}
+export function otpUri(a: Account): string {
+  const label = a.issuer && !a.name.startsWith(`${a.issuer}:`) ? `${a.issuer}:${a.name}` : a.name;
+  const p = new URLSearchParams({ secret: a.secret, issuer: a.issuer, algorithm: a.algorithm, digits: String(a.digits) });
+  p.set(a.type === 'hotp' ? 'counter' : 'period', a.type === 'hotp' ? a.counter : String(a.period));
+  return `otpauth://${a.type}/${encodeURIComponent(label)}?${p}`;
+}
+export function toCsv(accounts: Account[]): string {
+  const fields: (keyof Account)[] = ['name', 'issuer', 'secret', 'type', 'algorithm', 'digits', 'period', 'counter'];
+  const cell = (value: unknown) => { let s = String(value); if (/^[\s]*[=+@-]/.test(s)) s = `'${s}`; return `"${s.replace(/"/g, '""')}"`; };
+  return '\uFEFF' + [fields.join(','), ...accounts.map(a => fields.map(f => cell(a[f])).join(','))].join('\r\n');
+}
