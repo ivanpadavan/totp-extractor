@@ -4,7 +4,7 @@
 
 Turn an authenticator QR code into a secret key you can copy, back up or use in another 2FA app. **TOTP Extractor** decodes TOTP/HOTP setup QR codes and Google Authenticator exports directly in your browser.
 
-**[Open TOTP Extractor](https://totp-extractor.github.io/)** · [Русский](docs/README.ru.md)
+**[🚀 Open in your browser — no installation](https://totp-extractor.github.io/)** · [Русский](docs/README.ru.md)
 
 ## Move your 2FA accounts to another authenticator
 
@@ -14,7 +14,7 @@ Turn an authenticator QR code into a secret key you can copy, back up or use in 
 
 No installation or sign-up required. Works on phones and computers.
 
-## Supported QR codes and exports
+## 📷 Supported QR codes and exports
 
 - **TOTP and HOTP setup codes** — extract the Base32 secret key and account settings from a standard authenticator QR code.
 - **Google Authenticator exports** — decode one account or several, including exports split across multiple QR codes.
@@ -24,7 +24,7 @@ Export accounts as **JSON, CSV or individual QR/PNG images**. JSON and CSV impor
 
 You need the **setup or export QR code**. A screenshot of a six-digit login code does not contain the secret key.
 
-## Your keys stay in your browser
+## 🔐 Your keys stay in your browser
 
 Images and secret keys are processed locally and are never uploaded to a server. Keep downloaded exports private: they contain your unencrypted 2FA secret keys.
 
