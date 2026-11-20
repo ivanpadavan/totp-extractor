@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — Startseite",
+  "home": "2FA Key Extractor — Startseite",
   "local": "Verarbeitung im Browser",
   "help": "Hilfe",
   "language": "Sprache",
-  "title": "OTP-Schlüssel extrahieren",
-  "subtitle": "QR-Code oder Link hinzufügen, um Konten zu übertragen.",
+  "title": "2FA-Schlüssel aus QR-Codes extrahieren",
+  "subtitle": "QR-Code scannen und Schlüssel als JSON, CSV oder einzelne QR-Codes exportieren.",
   "import": "Import",
   "method": "Importmethode",
   "file": "Datei",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "Link aus dem QR-Code",
   "onePerLine": "Ein Link pro Zeile.",
   "extract": "Extrahieren",
-  "formatNote": "Standard-OTP-QR-Codes und Google-Authenticator-Exporte. Bei mehreren QR-Codes alle hinzufügen.",
+  "formatNote": "TOTP/HOTP-Einrichtungs-QR-Codes und Google-Authenticator-Exporte. Bei mehreren QR-Codes alle hinzufügen.",
   "accounts": "Konten",
   "clear": "Alle Daten löschen",
   "sessionNote": "Daten sind nur in diesem Tab verfügbar. Exporte enthalten geheime Schlüssel.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "Ungültige Anzahl der Exportteile.",
   "invalidBatchIndex": "Ungültige Nummer des Exportteils.",
   "googleDecodeFailed": "Google-Export konnte nicht gelesen werden. Die QR-Daten sind beschädigt.",
-  "description": "Schlüssel für Zwei-Faktor-Authentifizierung aus QR-Codes extrahieren. Bilder und Schlüssel bleiben im Browser."
+  "description": "TOTP- und HOTP-Schlüssel aus QR-Bildern oder der Kamera extrahieren. Unterstützt Einrichtungs-QR-Codes und Google-Authenticator-Exporte. JSON und CSV direkt im Browser."
 };

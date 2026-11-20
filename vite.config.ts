@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { negotiateLocale } from './src/locale.ts';
 
 export default defineConfig({
+  base: process.env.VITE_SITE_URL ? new URL(process.env.VITE_SITE_URL).pathname : '/',
   plugins: [{ name:'locale-endpoint', configureServer(server) {
     server.middlewares.use('/api/locale',(req,res) => {
       res.setHeader('Content-Type','application/json');

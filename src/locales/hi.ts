@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — होम",
+  "home": "2FA Key Extractor — होम",
   "local": "आपके ब्राउज़र में प्रोसेस होता है",
   "help": "सहायता",
   "language": "भाषा",
-  "title": "OTP कुंजियाँ निकालें",
-  "subtitle": "खाते स्थानांतरित करने के लिए QR या लिंक जोड़ें।",
+  "title": "QR से 2FA कुंजियाँ निकालें",
+  "subtitle": "QR स्कैन करें और कुंजियाँ JSON, CSV या अलग-अलग QR के रूप में सहेजें।",
   "import": "आयात",
   "method": "आयात का तरीका",
   "file": "फ़ाइल",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "QR कोड का लिंक",
   "onePerLine": "हर पंक्ति में एक लिंक।",
   "extract": "निकालें",
-  "formatNote": "मानक OTP QR और Google Authenticator का निर्यात। कई QR हों तो सभी जोड़ें।",
+  "formatNote": "TOTP/HOTP सेटअप QR और Google Authenticator निर्यात। कई QR हों तो सभी जोड़ें।",
   "accounts": "खाते",
   "clear": "सारा डेटा साफ़ करें",
   "sessionNote": "डेटा केवल इस टैब में उपलब्ध है। निर्यात फ़ाइलों में गुप्त कुंजियाँ होती हैं।",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "निर्यात के हिस्सों की संख्या अमान्य है।",
   "invalidBatchIndex": "निर्यात के हिस्से का क्रमांक अमान्य है।",
   "googleDecodeFailed": "Google निर्यात नहीं पढ़ सके। QR का डेटा खराब है।",
-  "description": "QR से दो-चरणीय प्रमाणीकरण की कुंजियाँ निकालें। तस्वीरें और कुंजियाँ आपके ब्राउज़र में रहती हैं।"
+  "description": "QR तस्वीरों या कैमरे से TOTP और HOTP कुंजियाँ निकालें। सेटअप QR और Google Authenticator निर्यात समर्थित हैं। ब्राउज़र में JSON या CSV सहेजें।"
 };

@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — ホーム",
+  "home": "2FA Key Extractor — ホーム",
   "local": "ブラウザー内で処理",
   "help": "ヘルプ",
   "language": "言語",
-  "title": "OTP キーの抽出",
-  "subtitle": "QR コードやリンクを追加してアカウントを移行します。",
+  "title": "QR から 2FA キーを抽出",
+  "subtitle": "QR を読み取り、認証キーを JSON・CSV・個別 QR で保存できます。",
   "import": "インポート",
   "method": "インポート方法",
   "file": "ファイル",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "QR コードのリンク",
   "onePerLine": "1 行に 1 つのリンク。",
   "extract": "抽出",
-  "formatNote": "標準 OTP QR と Google Authenticator のエクスポートに対応。QR が複数ある場合はすべて追加してください。",
+  "formatNote": "TOTP/HOTP の設定用 QR と Google Authenticator のエクスポートに対応。QR が複数ある場合はすべて追加してください。",
   "accounts": "アカウント",
   "clear": "すべてのデータを消去",
   "sessionNote": "データはこのタブ内だけで利用できます。エクスポートには秘密鍵が含まれます。",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "エクスポートの分割数が無効です。",
   "invalidBatchIndex": "エクスポートの部分番号が無効です。",
   "googleDecodeFailed": "Google エクスポートを読み取れません。QR データが破損しています。",
-  "description": "QR から二要素認証のキーを抽出します。画像とキーはブラウザー内に残ります。"
+  "description": "QR 画像やカメラから TOTP・HOTP キーを抽出。設定用 QR と Google Authenticator のエクスポートに対応。ブラウザー内で JSON・CSV に保存できます。"
 };

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#111714"/><rect x="40" y="40" width="1120" height="550" rx="28" fill="#19221d" stroke="#304136" stroke-width="2"/>
+<g font-family="Arial, sans-serif"><text x="92" y="132" font-size="22" font-weight="600" fill="#a5efcc" letter-spacing="3">TOTP / HOTP</text><text x="88" y="252" font-size="76" font-weight="700" fill="#e1ede5">2FA Key Extractor</text><text x="92" y="320" font-size="32" fill="#a5efcc">Authenticator keys from QR codes.</text><text x="92" y="400" font-size="24" fill="#93a89a">Images · Camera · JSON · CSV</text><text x="92" y="518" font-size="20" fill="#93a89a">Keys stay in your browser.</text></g>
+<g fill="none" stroke="#a5efcc" stroke-width="6" stroke-linecap="round"><circle cx="1056" cy="494" r="23"/><path d="m1040 510-35 35m15-15 9 9m-20 2 9 9"/></g>
+</svg>

@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — головна",
+  "home": "2FA Key Extractor — головна",
   "local": "Обробка в браузері",
   "help": "Довідка",
   "language": "Мова",
-  "title": "Видобування OTP-ключів",
-  "subtitle": "Додайте QR-код або посилання для перенесення облікових записів.",
+  "title": "Видобування ключів 2FA з QR-кодів",
+  "subtitle": "Зчитайте QR та збережіть ключі як JSON, CSV або окремі QR-коди.",
   "import": "Імпорт",
   "method": "Спосіб імпорту",
   "file": "Файл",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "Посилання з QR-коду",
   "onePerLine": "Одне посилання на рядок.",
   "extract": "Видобути",
-  "formatNote": "Стандартні QR OTP та експорт Google Authenticator. Якщо QR кілька, додайте всі.",
+  "formatNote": "QR налаштування TOTP/HOTP та експорт Google Authenticator. Якщо QR кілька, додайте всі.",
   "accounts": "Облікові записи",
   "clear": "Очистити всі дані",
   "sessionNote": "Дані доступні лише в цій вкладці. Експорт містить секретні ключі.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "Некоректна кількість частин експорту.",
   "invalidBatchIndex": "Некоректний номер частини експорту.",
   "googleDecodeFailed": "Не вдалося прочитати експорт Google. Дані QR пошкоджено.",
-  "description": "Видобування ключів двофакторної автентифікації з QR. Зображення й ключі залишаються в браузері."
+  "description": "Видобувайте ключі TOTP/HOTP із зображень QR або камери. Підтримуються QR налаштування й експорт Google Authenticator. Експортуйте JSON чи CSV у браузері."
 };

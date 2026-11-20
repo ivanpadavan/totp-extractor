@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — 홈",
+  "home": "2FA Key Extractor — 홈",
   "local": "브라우저에서 처리",
   "help": "도움말",
   "language": "언어",
-  "title": "OTP 키 추출",
-  "subtitle": "계정을 이전하려면 QR 코드나 링크를 추가하세요.",
+  "title": "QR에서 2FA 키 추출",
+  "subtitle": "QR을 스캔하고 인증 키를 JSON, CSV 또는 개별 QR로 저장하세요.",
   "import": "가져오기",
   "method": "가져오기 방식",
   "file": "파일",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "QR 코드의 링크",
   "onePerLine": "한 줄에 링크 하나씩 입력하세요.",
   "extract": "추출",
-  "formatNote": "표준 OTP QR 및 Google Authenticator 내보내기를 지원합니다. QR이 여러 개면 모두 추가하세요.",
+  "formatNote": "TOTP/HOTP 설정 QR 및 Google Authenticator 내보내기를 지원합니다. QR이 여러 개면 모두 추가하세요.",
   "accounts": "계정",
   "clear": "모든 데이터 지우기",
   "sessionNote": "데이터는 이 탭에서만 사용할 수 있습니다. 내보내기 파일에는 비밀 키가 포함됩니다.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "내보내기 부분 수가 올바르지 않습니다.",
   "invalidBatchIndex": "내보내기 부분 번호가 올바르지 않습니다.",
   "googleDecodeFailed": "Google 내보내기를 읽지 못했습니다. QR 데이터가 손상되었습니다.",
-  "description": "QR에서 2단계 인증 키를 추출합니다. 이미지와 키는 브라우저에만 보관됩니다."
+  "description": "QR 이미지나 카메라에서 TOTP·HOTP 키를 추출하세요. 설정 QR과 Google Authenticator 내보내기를 지원하며 브라우저에서 JSON·CSV로 저장합니다. 키는 업로드되지 않습니다."
 };

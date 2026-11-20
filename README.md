@@ -1,73 +1,61 @@
-# totp-extractor
+# 2FA Key Extractor
 
-Приватный инструмент для извлечения секретных ключей TOTP/HOTP. Интерфейс на 16 языках, светлая и тёмная темы, адаптация к телефону и арабское направление справа налево (RTL).
+Extract authenticator secret keys from QR codes — directly in your browser.
 
-## Возможности
+Read **TOTP and HOTP setup QR codes**, decode **Google Authenticator exports**, and save portable keys as JSON, CSV or individual QR codes. Use an image, a screenshot, a camera or an `otpauth://` link.
 
-- Загрузка нескольких изображений, несколько QR на одном изображении, перетаскивание и вставка скриншота.
-- Сканирование камерой через `getUserMedia`, задняя камера по умолчанию, кнопка фото через `input capture`.
-- Стандартные `otpauth://totp` / `otpauth://hotp` и Google Authenticator `otpauth-migration://offline`.
-- SHA1 / SHA256 / SHA512, 6 / 8 цифр, период TOTP, точный 64-битный счётчик HOTP.
-- Учёт частей экспорта Google и удаление дубликатов с одинаковыми параметрами.
-- Скрытые ключи, копирование, отдельные QR/PNG, экспорт JSON и CSV.
+**[Open the app](https://totp.frolkin.top/)** · [Русский](docs/README.ru.md) · [Development and deployment](docs/DEVELOPMENT.md)
 
-## Приватность
+## One QR code. Portable keys.
 
-Изображения, видео, строки OTP и ключи обрабатываются в памяти текущей вкладки. Приложение не отправляет их на сервер, не использует аналитику, внешние шрифты или CDN. WASM и шрифт размещены вместе с приложением. В localStorage сохраняются только выбранные тема (`theme`) и язык (`language`), если их изменить вручную.
+1. Add a QR image, paste a screenshot or scan with your camera.
+2. Review each account and reveal or copy its secret key.
+3. Download JSON, CSV or a QR code to use with another authenticator.
 
-При закрытии/перезагрузке страницы или нажатии очистки данные удаляются из состояния интерфейса. Это не обещание криптографического стирания памяти JavaScript. Файлы экспорта и буфер обмена содержат секреты и контролируются пользователем.
+**TOTP** (time-based codes) and **HOTP** (counter-based codes) are open standards used by many authenticator apps. This tool reads their standard `otpauth://` setup links and QR codes. Google Authenticator’s `otpauth-migration://` export is supported as an additional input format.
 
-Камера останавливается при смене способа ввода, скрытии вкладки, очистке и уходе со страницы. Требуется HTTPS или localhost. Фото через `capture="environment"` — запасной вариант для мобильных браузеров.
+## What you can do
 
-Скриншот одноразового цифрового кода не позволяет восстановить секрет. Нужен QR настройки/экспорта. Обрабатываются изображения до 20 МиБ и 40 мегапикселей. На изображении распознаётся до 64 QR. Для экспорта Google проверяются сами OTP-параметры; версия контейнера не ограничивается значением 1. У одиночного QR размер группы может отсутствовать или быть нулевым. Учёт недостающих частей включается только для групп из нескольких QR. Повреждённые данные, неверные номера частей и неподдерживаемые алгоритмы отклоняются явно.
+- Read multiple images and multiple QR codes in one image.
+- Scan with a phone or computer camera; paste screenshots or drag and drop files.
+- Track missing parts of a Google Authenticator export and skip duplicate accounts.
+- Copy Base32 secrets, download individual QR images, or export all accounts as JSON or CSV.
+- Preserve SHA-1, SHA-256 or SHA-512 settings, 6- or 8-digit codes and HOTP counters.
+- Work in 16 languages, with light/dark themes and an Arabic RTL layout.
 
-## Локализация
+Images and keys are processed locally. No account, database or secret upload is required. Only your language and theme preferences are saved in browser storage. Exported files contain unencrypted secrets, so keep them somewhere you trust.
 
-Поддерживаются `ru`, `en`, `es`, `pt`, `fr`, `de`, `it`, `tr`, `uk`, `pl`, `zh`, `ja`, `ko`, `ar`, `hi`, `id`.
+## Supported formats
 
-При первом открытии сервер выбирает поддерживаемый язык по **HTTP `Accept-Language`**, учитывая региональные теги (`pt-BR` → `pt`), веса `q` и исключения `q=0`. Если подходящего языка нет, используется английский. Автоматический выбор не сохраняется. Ручной выбор имеет приоритет и записывается в `language`. `navigator.language` для начального выбора не используется.
+| Input | Support |
+| --- | --- |
+| Standard TOTP/HOTP setup QR or `otpauth://` link | Yes |
+| Google Authenticator export QR or `otpauth-migration://` link | Yes, including multiple parts |
+| PNG, JPEG, WebP or BMP images | Up to 20 MB and 40 megapixels per image |
+| Several links | One link per line |
 
-Переключение не перезагружает страницу, не сбрасывает аккаунты, введённые ссылки или работающую камеру. Переводятся интерфейс, справка, сообщения, диалоги и ошибки; данные аккаунтов, секреты, OTP URI, JSON и CSV не переводятся. Арабский интерфейс использует RTL, ключи и URI сохраняют направление LTR. Каталоги находятся в `src/locales/`, список языков и согласование заголовка — в `src/locale.ts`.
+**Outputs:** JSON, CSV, standard account QR codes and PNG images. Saved JSON/CSV files are export formats; importing them back is not implemented yet. A screenshot of a six-digit code cannot reveal its secret key — use the setup or export QR.
 
-## Разработка
+## Run it yourself
 
-Нужен Node.js 24+.
+Node.js 24 or later:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-```sh
-npm test
-npm run build
-npx playwright install chromium
-npm run test:e2e
-```
-
-Браузерные проверки выполняются на production-сборке через тот же Node.js-сервер, что используется в Docker: изображения, несколько QR, multipart, копирование, JSON/CSV, QR roundtrip, XSS-метки, видеокадры через canvas MediaStream, отказ в доступе к камере, обе темы, вставка/перетаскивание и мобильная ширина. Для камеры используется синтетический видеопоток; физическая камера телефона требует ручной проверки на устройстве.
-
-Для проверки работающего сервера: `BASE_URL=https://totp.frolkin.top npm run test:e2e`.
-
-## Docker / Dokploy
+Docker:
 
 ```sh
-docker build -t totp-extractor .
-docker run --rm -p 8080:8080 totp-extractor
+docker build -t 2fa-key-extractor .
+docker run --rm -p 8080:8080 2fa-key-extractor
 ```
 
-Dockerfile запускает unit-тесты и сборку, затем раздаёт статику через Node.js 24 без root и без runtime-зависимостей npm. Порт 8080, health check `/health`. Разрешены только GET/HEAD, access log отсутствует, CSP и заголовки приватности сохранены. Единственный динамический endpoint `/api/locale` выбирает язык по HTTP-заголовку `Accept-Language`; он не принимает изображения, ссылки OTP или ключи. Секреты окружения и база данных не нужны.
+See [development and deployment](docs/DEVELOPMENT.md) for tests, GitHub Pages, language negotiation and SEO build settings.
 
-Dokploy: GitHub `ivanpadavan/totp-extractor`, ветка `main`, тип сборки Dockerfile, контекст `.`, порт 8080, HTTPS-домен `totp.frolkin.top`. Установка GitHub App Dokploy должна иметь доступ к приватному репозиторию. Приватность исходного репозитория не ограничивает доступ к статическому сайту.
+## Built with
 
-## Зависимости и происхождение
+ZXing WASM, protobufjs, qrcode, Lucide, TypeScript and Vite. The interface and parser are independently implemented; the Google migration format follows the public Protobuf schema. Thanks to [extract_otp_secrets](https://github.com/scito/extract_otp_secrets) and [Aegis](https://github.com/beemdevelopment/Aegis) for documenting the format and migration use case.
 
-Собственная реализация интерфейса и OTP-парсера. Код Python из scito/extract_otp_secrets не копируется. Формат миграции Google совместим с описанием публичного протокола (поля MigrationPayload / OtpParameters).
-
-- ZXing WASM — локальное распознавание QR, MIT; содержит ZXing-C++ (Apache-2.0), см. лицензии пакета.
-- protobufjs minimal — чтение Protobuf без динамической генерации кода, BSD-3-Clause.
-- qrcode — генерация QR, MIT.
-- Lucide — иконки, ISC.
-- Manrope — локальный шрифт, SIL Open Font License, [лицензия](public/manrope-OFL.txt).
-
-Все версии зависимостей зафиксированы в package-lock.json.
+Third-party notices are included with the deployed app. This project is not affiliated with Google or any authenticator vendor.

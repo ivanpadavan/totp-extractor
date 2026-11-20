@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — beranda",
+  "home": "2FA Key Extractor — beranda",
   "local": "Diproses di browser Anda",
   "help": "Bantuan",
   "language": "Bahasa",
-  "title": "Ekstrak kunci OTP",
-  "subtitle": "Tambahkan QR atau tautan untuk memindahkan akun.",
+  "title": "Ekstrak kunci 2FA dari kode QR",
+  "subtitle": "Pindai QR lalu ekspor kunci sebagai JSON, CSV, atau QR terpisah.",
   "import": "Impor",
   "method": "Metode impor",
   "file": "Berkas",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "Tautan dari kode QR",
   "onePerLine": "Satu tautan per baris.",
   "extract": "Ekstrak",
-  "formatNote": "QR OTP standar dan ekspor Google Authenticator. Tambahkan semua QR jika ada beberapa.",
+  "formatNote": "QR penyiapan TOTP/HOTP dan ekspor Google Authenticator. Tambahkan semua QR jika ada beberapa.",
   "accounts": "Akun",
   "clear": "Hapus semua data",
   "sessionNote": "Data hanya tersedia di tab ini. Hasil ekspor berisi kunci rahasia.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "Jumlah bagian ekspor tidak valid.",
   "invalidBatchIndex": "Nomor bagian ekspor tidak valid.",
   "googleDecodeFailed": "Ekspor Google tidak dapat dibaca. Data QR rusak.",
-  "description": "Ekstrak kunci autentikasi dua faktor dari QR. Gambar dan kunci tetap di browser Anda."
+  "description": "Ekstrak kunci TOTP dan HOTP dari gambar QR atau kamera. Mendukung QR penyiapan dan ekspor Google Authenticator. Simpan JSON atau CSV langsung di browser."
 };

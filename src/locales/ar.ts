@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — الرئيسية",
+  "home": "2FA Key Extractor — الرئيسية",
   "local": "المعالجة داخل المتصفح",
   "help": "المساعدة",
   "language": "اللغة",
-  "title": "استخراج مفاتيح OTP",
-  "subtitle": "أضف رمز QR أو رابطًا لنقل حساباتك.",
+  "title": "استخراج مفاتيح 2FA من QR",
+  "subtitle": "امسح رمز QR وصدّر مفاتيح المصادقة بصيغة JSON أو CSV أو رموز QR منفصلة.",
   "import": "استيراد",
   "method": "طريقة الاستيراد",
   "file": "ملف",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "الرابط من رمز QR",
   "onePerLine": "رابط واحد في كل سطر.",
   "extract": "استخراج",
-  "formatNote": "رموز OTP القياسية وتصدير Google Authenticator. أضف جميع الرموز إذا تعددت.",
+  "formatNote": "رموز إعداد TOTP/HOTP وتصدير Google Authenticator. أضف جميع الرموز إذا تعددت.",
   "accounts": "الحسابات",
   "clear": "مسح جميع البيانات",
   "sessionNote": "البيانات متاحة في علامة التبويب هذه فقط. ملفات التصدير تحتوي على مفاتيح سرية.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "عدد أجزاء التصدير غير صالح.",
   "invalidBatchIndex": "رقم جزء التصدير غير صالح.",
   "googleDecodeFailed": "تعذّرت قراءة تصدير Google. بيانات QR تالفة.",
-  "description": "استخرج مفاتيح المصادقة الثنائية من QR. تبقى الصور والمفاتيح داخل متصفحك."
+  "description": "استخرج مفاتيح TOTP وHOTP من صور QR أو الكاميرا. يدعم رموز الإعداد وتصدير Google Authenticator. احفظ JSON أو CSV داخل المتصفح دون رفع المفاتيح."
 };

@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — ana sayfa",
+  "home": "2FA Key Extractor — ana sayfa",
   "local": "Tarayıcınızda işlenir",
   "help": "Yardım",
   "language": "Dil",
-  "title": "OTP anahtarlarını çıkarın",
-  "subtitle": "Hesapları aktarmak için QR kodu veya bağlantı ekleyin.",
+  "title": "QR kodlarından 2FA anahtarlarını çıkarın",
+  "subtitle": "QR tarayın; anahtarları JSON, CSV veya ayrı QR kodları olarak aktarın.",
   "import": "İçe aktar",
   "method": "İçe aktarma yöntemi",
   "file": "Dosya",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "QR kodundaki bağlantı",
   "onePerLine": "Her satıra bir bağlantı.",
   "extract": "Çıkar",
-  "formatNote": "Standart OTP QR kodları ve Google Authenticator dışa aktarımları. Birden çok QR varsa hepsini ekleyin.",
+  "formatNote": "TOTP/HOTP kurulum QR kodları ve Google Authenticator dışa aktarımları. Birden çok QR varsa hepsini ekleyin.",
   "accounts": "Hesaplar",
   "clear": "Tüm verileri temizle",
   "sessionNote": "Veriler yalnızca bu sekmede bulunur. Dışa aktarılan dosyalar gizli anahtar içerir.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "Geçersiz aktarım parçası sayısı.",
   "invalidBatchIndex": "Geçersiz aktarım parçası numarası.",
   "googleDecodeFailed": "Google dışa aktarımı okunamadı. QR verisi bozuk.",
-  "description": "QR kodlarından iki faktörlü kimlik doğrulama anahtarlarını çıkarın. Görseller ve anahtarlar tarayıcınızda kalır."
+  "description": "QR görsellerinden veya kameradan TOTP ve HOTP anahtarlarını çıkarın. Kurulum QR kodları ve Google Authenticator dışa aktarımları desteklenir. Tarayıcıda JSON veya CSV kaydedin."
 };

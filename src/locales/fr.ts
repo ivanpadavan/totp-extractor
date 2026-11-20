@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — accueil",
+  "home": "2FA Key Extractor — accueil",
   "local": "Traitement dans votre navigateur",
   "help": "Aide",
   "language": "Langue",
-  "title": "Extraire les clés OTP",
-  "subtitle": "Ajoutez un QR ou un lien pour transférer vos comptes.",
+  "title": "Extraire les clés 2FA des codes QR",
+  "subtitle": "Scannez un QR et exportez les clés en JSON, CSV ou codes QR individuels.",
   "import": "Importer",
   "method": "Mode d’importation",
   "file": "Fichier",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "Lien du code QR",
   "onePerLine": "Un lien par ligne.",
   "extract": "Extraire",
-  "formatNote": "QR OTP standard et exports Google Authenticator. Ajoutez tous les QR s’il y en a plusieurs.",
+  "formatNote": "QR de configuration TOTP/HOTP et exports Google Authenticator. Ajoutez tous les QR s’il y en a plusieurs.",
   "accounts": "Comptes",
   "clear": "Effacer toutes les données",
   "sessionNote": "Les données restent dans cet onglet. Les exports contiennent des clés secrètes.",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "Nombre de parties de l’export invalide.",
   "invalidBatchIndex": "Numéro de partie de l’export invalide.",
   "googleDecodeFailed": "Impossible de lire l’export Google. Les données du QR sont endommagées.",
-  "description": "Extrayez les clés de double authentification des QR. Images et clés restent dans votre navigateur."
+  "description": "Extrayez les clés TOTP et HOTP d’images QR ou de la caméra. QR de configuration et exports Google Authenticator pris en charge. Export JSON ou CSV dans le navigateur."
 };

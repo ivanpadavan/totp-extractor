@@ -1,10 +1,10 @@
 export default {
-  "home": "totp-extractor — 首页",
+  "home": "2FA Key Extractor — 首页",
   "local": "在浏览器中处理",
   "help": "帮助",
   "language": "语言",
-  "title": "提取 OTP 密钥",
-  "subtitle": "添加二维码或链接以迁移账户。",
+  "title": "从二维码提取 2FA 密钥",
+  "subtitle": "扫描二维码，将身份验证密钥导出为 JSON、CSV 或独立二维码。",
   "import": "导入",
   "method": "导入方式",
   "file": "文件",
@@ -24,7 +24,7 @@ export default {
   "uriLabel": "二维码中的链接",
   "onePerLine": "每行一个链接。",
   "extract": "提取",
-  "formatNote": "支持标准 OTP 二维码和 Google Authenticator 导出。如果有多个二维码，请全部添加。",
+  "formatNote": "支持 TOTP/HOTP 设置二维码和 Google Authenticator 导出。如果有多个二维码，请全部添加。",
   "accounts": "账户",
   "clear": "清除所有数据",
   "sessionNote": "数据仅在当前标签页可用。导出文件包含密钥。",
@@ -96,5 +96,5 @@ export default {
   "invalidBatchSize": "导出部分数量无效。",
   "invalidBatchIndex": "导出部分编号无效。",
   "googleDecodeFailed": "无法读取 Google 导出。二维码数据已损坏。",
-  "description": "从二维码提取双重身份验证密钥。图片和密钥均保留在浏览器中。"
+  "description": "从二维码图片或相机提取 TOTP 和 HOTP 密钥。支持身份验证设置二维码和 Google Authenticator 导出。在浏览器中保存为 JSON 或 CSV，密钥不会上传。"
 };
