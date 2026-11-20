@@ -12,7 +12,7 @@ const label = (key: MessageKey) => `<span data-i18n="${key}">${escape(t(key))}</
 return `
   <header class="site-header"><a class="brand" href="${base}" data-i18n-attr="aria-label:home" aria-label="${t('home')}">${icon('key-round')}<span>${siteName}</span></a><div class="header-actions"><span class="privacy-pill">${icon('lock-keyhole')} ${label('local')}</span><label class="language-control">${icon('languages')}<select id="language" aria-label="${t('language')}" data-i18n-attr="aria-label:language">${languages.map(l => `<option value="${l.code}" lang="${l.code}" dir="${l.code === 'ar' ? 'rtl' : 'ltr'}">${l.name}</option>`).join('')}</select><span class="select-chevron" aria-hidden="true"></span></label><button id="help" class="icon-button" data-i18n-attr="aria-label:help" aria-label="${t('help')}">${icon('circle-help')}</button><button id="theme-toggle" class="icon-button theme-toggle" aria-label="${t('lightTheme')}">${icon('sun')}</button></div></header>
   <main>
-    <div class="page-heading"><div><h1>${label('title')}</h1><p>${label('subtitle')}</p></div></div>
+    <div class="page-heading"><div><h1>${label('title')}</h1><p>${label('sessionNote')}</p></div></div>
     <div class="workspace">
       <section class="import-card" aria-labelledby="import-title"><div class="card-heading"><h2 id="import-title">${label('import')}</h2><span class="panel-hint">TOTP / HOTP</span></div>
         <div class="tabs" role="tablist" data-i18n-attr="aria-label:method" aria-label="${t('method')}"><button id="tab-image" role="tab" aria-selected="true" aria-controls="panel-image" data-tab="image">${icon('image-plus')} ${label('file')}</button><button id="tab-camera" role="tab" aria-selected="false" aria-controls="panel-camera" tabindex="-1" data-tab="camera">${icon('camera')} ${label('camera')}</button><button id="tab-text" role="tab" aria-selected="false" aria-controls="panel-text" tabindex="-1" data-tab="text">${icon('link')} ${label('link')}</button></div>
@@ -27,7 +27,6 @@ return `
       </section>
       <section id="results" class="results" aria-labelledby="results-title"><div class="results-heading"><h2 id="results-title">${label('accounts')} <span id="count">0</span></h2><div class="export-actions"><button id="export-json" class="button secondary" disabled>${icon('file-json')} JSON</button><button id="export-csv" class="button secondary" disabled>${icon('download')} CSV</button><button id="clear" class="icon-button danger" data-i18n-attr="aria-label:clear" aria-label="${t('clear')}" disabled>${icon('trash-2')}</button></div></div><div id="batch-status" class="batch-status" role="status" hidden></div><div id="account-list"></div></section>
     </div>
-    <div class="session-note">${icon('shield-check')} ${label('sessionNote')}</div>
   </main>
   <div id="toast" class="toast" role="status" hidden></div>
   <dialog id="qr-dialog"><button id="close-dialog" class="icon-button dialog-close" data-i18n-attr="aria-label:close" aria-label="${t('close')}">${icon('x')}</button><div id="dialog-content"></div></dialog>
