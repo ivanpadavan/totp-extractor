@@ -1,3 +1,5 @@
+[![TOTP Extractor — authenticator keys from QR codes. Open source · MIT.](docs/assets/readme-banner.svg)](https://totp-extractor.github.io/)
+
 # TOTP Extractor — extract 2FA secret keys from QR codes
 
 Turn an authenticator QR code into a secret key you can copy, back up or use in another 2FA app. **TOTP Extractor** decodes TOTP/HOTP setup QR codes and Google Authenticator exports directly in your browser.

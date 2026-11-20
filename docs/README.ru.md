@@ -1,3 +1,5 @@
+[![TOTP Extractor — ключи аутентификации из QR-кодов. Open source · MIT.](assets/readme-banner.ru.svg)](https://totp-extractor.github.io/)
+
 # TOTP Extractor — секретные ключи 2FA из QR-кодов
 
 Получите секретный ключ из QR-кода аутентификатора, чтобы скопировать его, сохранить резервную копию или перенести аккаунт в другое приложение 2FA. **TOTP Extractor** читает QR-коды настройки TOTP/HOTP и экспорт Google Authenticator прямо в браузере.
