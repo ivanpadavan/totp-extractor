@@ -116,14 +116,14 @@ test('paste and drag-and-drop image input', async ({page}) => {
   await page.goto('/');
   const data = (await png(uri)).toString('base64');
   await page.evaluate(async b64 => {
-    const blob=await fetch('data:image/png;base64,'+b64).then(r=>r.blob());
+    const blob=new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:'image/png'});
     const transfer=new DataTransfer(); transfer.items.add(new File([blob],'paste.png',{type:'image/png'}));
     document.dispatchEvent(new ClipboardEvent('paste',{clipboardData:transfer}));
   },data);
   await expect(page.locator('#count')).toHaveText('1');
   await page.getByRole('button',{name:'Очистить все данные'}).click();
   await page.evaluate(async b64=> {
-    const blob=await fetch('data:image/png;base64,'+b64).then(r=>r.blob());
+    const blob=new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:'image/png'});
     const transfer=new DataTransfer(); transfer.items.add(new File([blob],'drop.png',{type:'image/png'}));
     document.querySelector('#dropzone')!.dispatchEvent(new DragEvent('drop',{dataTransfer:transfer,bubbles:true,cancelable:true}));
   },data);
