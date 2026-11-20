@@ -11,16 +11,9 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The production server (`npm run preview`, port 8080; configurable with `PORT`) serves the generated static application. It accepts GET/HEAD only, has no access log and requires no database or npm runtime dependencies. `/health` is the container health check.
+The production server (`npm run preview`, port 8080; configurable with `PORT`) serves the generated static application. It accepts GET/HEAD only, has no access log and requires no database or npm runtime dependencies. `/health` is the health check endpoint.
 
-Build and run with Docker:
-
-```sh
-docker build -t 2fa-key-extractor .
-docker run --rm -p 8080:8080 2fa-key-extractor
-```
-
-The Docker build runs unit tests and produces the application before switching to the unprivileged `node` user. The server adds CSP, no-store, no-referrer and camera permissions headers. All OTP parsing, image decoding and QR generation happen in the browser.
+The server adds CSP, no-store, no-referrer and camera permissions headers. All OTP parsing, image decoding and QR generation happen in the browser.
 
 ## GitHub Pages
 
