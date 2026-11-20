@@ -86,7 +86,7 @@ export function parseOtp(input: string): Parsed {
     const encoded = (url.searchParams.get('data') || '').replace(/ /g, '+').replace(/-/g, '+').replace(/_/g, '/');
     const reader = Reader.create(Uint8Array.from(atob(encoded), c => c.charCodeAt(0)));
     const accounts: Account[] = [];
-    let version = 0, size = 1, index = 0, id = 0;
+    let version = 0, size = 0, index = 0, id = 0;
     while (reader.pos < reader.len) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -98,8 +98,15 @@ export function parseOtp(input: string): Parsed {
         default: reader.skipType(tag & 7);
       }
     }
-    if (version !== 1 || !accounts.length || size < 1 || size > 1000 || index < 0 || index >= size) throw new Error('Неподдерживаемый или неполный экспорт Google.');
-    return { accounts, batch: { id, size, index } };
+    if (!accounts.length) throw new Error('В QR экспорта Google нет аккаунтов.');
+    // Envelope metadata is not required to decode the account fields. Some
+    // exporters omit the version/batch fields or write a zero batch size for
+    // a single QR. Validate account parameters above, independently of the
+    // envelope version, as compatible Google migration importers do.
+    if (version < 0) throw new Error('Некорректная версия экспорта Google.');
+    if (size < 0 || size > 1000) throw new Error('Некорректное количество частей экспорта Google.');
+    if (index < 0 || (size === 0 ? index !== 0 : index >= size)) throw new Error('Некорректный номер части экспорта Google.');
+    return size > 1 ? { accounts, batch: { id, size, index } } : { accounts };
   } catch (error) {
     if (error instanceof Error && /экспорт|параметр|ключ|счётчик/.test(error.message)) throw error;
     throw new Error('Не удалось прочитать экспорт Google. QR-код повреждён.');

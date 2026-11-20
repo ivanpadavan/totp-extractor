@@ -6,6 +6,20 @@ const uri = 'otpauth://totp/Example:alice%40example.com?secret=JBSWY3DPEHPK3PXP&
 const secret = 'JBSWY3DPEHPK3PXP';
 const png = (data: string) => QRCode.toBuffer(data, { width: 600, margin: 4, errorCorrectionLevel: 'M' });
 
+test('single-account Google screenshot without multipart metadata imports successfully', async ({page}) => {
+  await page.goto('/');
+  for (const url of [migration(0, 0, {single:true}), migration(0, 1, {single:true,version:2}), migration(0, 1, {single:true,version:null,omitGroup:true})]) {
+    await page.locator('#file-input').setInputFiles({name:'IMG_2621.png',mimeType:'image/png',buffer:await png(url)});
+    await expect(page.locator('#import-status')).toContainText('Распознано QR: 1. Новых аккаунтов: 1.');
+    await expect(page.locator('#count')).toHaveText('1');
+    await expect(page.locator('#batch-status')).toBeHidden();
+    await expect(page.locator('.account-name')).toHaveText('alice@example.com');
+    await page.getByRole('button', {name:'Показать ключ',exact:true}).click();
+    await expect(page.locator('.secret-value')).toHaveText('GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
+    await page.getByRole('button', {name:'Очистить все данные'}).click();
+  }
+});
+
 test('image extraction, reveal, copy, QR roundtrip, export and clear', async ({ page, context }) => {
   const requests: { url: string; method: string }[] = [];
   const errors: string[] = [];
@@ -45,8 +59,8 @@ test('image extraction, reveal, copy, QR roundtrip, export and clear', async ({ 
 
 test('multiple QR in one image and multipart migration deduplication', async ({page}) => {
   await page.goto('/');
-  const first=PNG.sync.read(await png(migration(0,2)));
-  const second=PNG.sync.read(await png(migration(1,2,{name:'charlie@example.com'})));
+  const first=PNG.sync.read(await png(migration(0,2,{version:2})));
+  const second=PNG.sync.read(await png(migration(1,2,{name:'charlie@example.com',version:2})));
   const combined=new PNG({width:1220,height:600,colorType:6}); combined.data.fill(255);
   PNG.bitblt(first,combined,0,0,600,600,0,0); PNG.bitblt(second,combined,0,0,600,600,620,0);
   await page.locator('#file-input').setInputFiles({name:'multi.png',mimeType:'image/png',buffer:PNG.sync.write(combined)});
@@ -55,6 +69,15 @@ test('multiple QR in one image and multipart migration deduplication', async ({p
   await page.locator('#file-input').setInputFiles({name:'same.png',mimeType:'image/png',buffer:PNG.sync.write(combined)});
   await expect(page.locator('#import-status')).toContainText('Новых аккаунтов: 0');
   await expect(page.locator('#count')).toHaveText('3');
+});
+
+test('all accounts in one Google export import with version 2 and no batch size', async ({page}) => {
+  await page.goto('/');
+  await page.locator('#file-input').setInputFiles({name:'all-accounts.png',mimeType:'image/png',buffer:await png(migration(0,0,{version:2}))});
+  await expect(page.locator('#import-status')).toContainText('Распознано QR: 1. Новых аккаунтов: 2.');
+  await expect(page.locator('#count')).toHaveText('2');
+  await expect(page.locator('#batch-status')).toBeHidden();
+  await expect(page.locator('.account-name')).toHaveText(['alice@example.com','bob@example.com']);
 });
 
 test('multipart status, malicious labels, invalid inputs and keyboard tabs', async ({page}) => {

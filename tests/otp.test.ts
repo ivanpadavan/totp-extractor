@@ -49,3 +49,33 @@ test('CSV quotes newlines and neutralizes spreadsheet formulas', () => {
   const csv = toCsv([a]);
   assert.ok(csv.includes('"\'=HYPERLINK(""bad"")"')); assert.ok(csv.includes('"one,\ntwo"'));
 });
+
+// Single-account Google exports need not carry multipart metadata.
+test('single-account migration accepts absent and zero batch size', () => {
+  for (const url of [migration(0, 0, {single:true}), migration(0, 1, {single:true,omitGroup:true})]) {
+    const parsed = parseOtp(url);
+    assert.equal(parsed.accounts.length, 1);
+    assert.equal(parsed.accounts[0].name, 'alice@example.com');
+    assert.equal(parsed.batch, undefined);
+  }
+});
+test('single-account migration accepts absent version and version 2', () => {
+  for (const version of [null, 0, 2]) {
+    const parsed = parseOtp(migration(0, 1, {single:true,version}));
+    assert.equal(parsed.accounts.length, 1);
+    assert.equal(parsed.accounts[0].secret, 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ');
+  }
+});
+test('invalid migration metadata has a specific error and is not mistaken for a missing QR', () => {
+  assert.throws(() => parseOtp(migration(0, 1, {version:-1})), /версия экспорта/);
+  for (const size of [-1, 1001]) assert.throws(() => parseOtp(migration(0, size)), /количество частей/);
+  for (const [index, size] of [[-1, 1], [1, 0], [2, 2]]) assert.throws(() => parseOtp(migration(index, size)), /номер части/);
+});
+test('multi-account exports preserve accounts and multipart tracking with version 2', () => {
+  const singleQr = parseOtp(migration(0, 0, {version:2}));
+  assert.deepEqual(singleQr.accounts.map(a => a.name), ['alice@example.com', 'bob@example.com']);
+  assert.equal(singleQr.batch, undefined);
+  const multipart = parseOtp(migration(1, 3, {version:2}));
+  assert.equal(multipart.accounts.length, 2);
+  assert.deepEqual(multipart.batch, {id:42,size:3,index:1});
+});
